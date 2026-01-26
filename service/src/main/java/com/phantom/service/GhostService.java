@@ -5,17 +5,15 @@ import com.phantom.model.entity.Ghost;
 import com.phantom.repository.AppRepository;
 import com.phantom.repository.CacheRepository;
 import com.phantom.util.Constants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@Slf4j
 public class GhostService {
-    
-    private static final Logger logger = LoggerFactory.getLogger(GhostService.class);
     
     private final AppRepository appRepository;
     private final CacheRepository cacheRepository;
@@ -27,7 +25,7 @@ public class GhostService {
     
     public Ghost createGhost(String userId, String ticker, String direction, Double intendedPrice,
                             Double intendedSize, List<String> hesitationTags, String noteText, String voiceKey) {
-        logger.info("Creating ghost for userId: {}, ticker: {}", userId, ticker);
+        log.info("Creating ghost for userId: {}, ticker: {}", userId, ticker);
         
         String normalizedTicker = ticker.trim().toUpperCase();
         long createdAtEpochMs = System.currentTimeMillis();
@@ -60,7 +58,7 @@ public class GhostService {
     }
     
     public Ghost getGhost(String userId, String sk) {
-        logger.info("Retrieving ghost for userId: {}, sk: {}", userId, sk);
+        log.info("Retrieving ghost for userId: {}, sk: {}", userId, sk);
         
         Ghost ghost = appRepository.getGhost(userId, sk);
         
@@ -72,7 +70,7 @@ public class GhostService {
     }
     
     public List<Ghost> listGhosts(String userId, Integer limit) {
-        logger.info("Listing ghosts for userId: {}", userId);
+        log.info("Listing ghosts for userId: {}", userId);
         
         int effectiveLimit = limit != null ? limit : 50;
         
@@ -80,7 +78,7 @@ public class GhostService {
     }
     
     public Ghost updateGhost(String userId, String sk, String status, String noteText) {
-        logger.info("Updating ghost for userId: {}, sk: {}", userId, sk);
+        log.info("Updating ghost for userId: {}, sk: {}", userId, sk);
         
         Ghost ghost = appRepository.getGhost(userId, sk);
         

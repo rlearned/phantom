@@ -7,15 +7,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phantom.model.entity.UserProfile;
 import com.phantom.service.UserService;
 import com.phantom.util.ResponseBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class UserController {
     
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
     
     private final UserService userService;
@@ -37,7 +36,7 @@ public class UserController {
             
             return ResponseBuilder.ok(response);
         } catch (Exception e) {
-            logger.error("Error retrieving user profile", e);
+            log.error("Error retrieving user profile", e);
             return ResponseBuilder.internalServerError("Failed to retrieve user profile");
         }
     }
@@ -64,7 +63,7 @@ public class UserController {
             
             return ResponseBuilder.ok(response);
         } catch (Exception e) {
-            logger.error("Error updating user profile", e);
+            log.error("Error updating user profile", e);
             return ResponseBuilder.internalServerError("Failed to update user profile");
         }
     }
@@ -78,7 +77,7 @@ public class UserController {
             
             return ResponseBuilder.ok(response);
         } catch (Exception e) {
-            logger.error("Error deleting user profile", e);
+            log.error("Error deleting user profile", e);
             return ResponseBuilder.internalServerError("Failed to delete user profile");
         }
     }

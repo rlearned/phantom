@@ -12,17 +12,15 @@ import com.phantom.service.GhostService;
 import com.phantom.service.MarketDataService;
 import com.phantom.service.UserService;
 import com.phantom.util.ResponseBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class ApiHandler implements RequestHandler<APIGatewayV2HTTPEvent, APIGatewayV2HTTPResponse> {
-    
-    private static final Logger logger = LoggerFactory.getLogger(ApiHandler.class);
     
     private final UserController userController;
     private final GhostController ghostController;
@@ -52,7 +50,7 @@ public class ApiHandler implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
     
     @Override
     public APIGatewayV2HTTPResponse handleRequest(APIGatewayV2HTTPEvent event, Context context) {
-        logger.info("Received request: {} {}", event.getRequestContext().getHttp().getMethod(), 
+        log.info("Received request: {} {}", event.getRequestContext().getHttp().getMethod(), 
                 event.getRawPath());
         
         try {
@@ -99,7 +97,7 @@ public class ApiHandler implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
             return ResponseBuilder.notFound("Route not found");
             
         } catch (Exception e) {
-            logger.error("Error handling request", e);
+            log.error("Error handling request", e);
             return ResponseBuilder.internalServerError("Internal server error");
         }
     }

@@ -3,12 +3,10 @@ package com.phantom.service;
 import com.phantom.model.entity.DashboardSummary;
 import com.phantom.repository.AppRepository;
 import com.phantom.util.Constants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class DashboardService {
-    
-    private static final Logger logger = LoggerFactory.getLogger(DashboardService.class);
     
     private final AppRepository appRepository;
     
@@ -17,12 +15,12 @@ public class DashboardService {
     }
     
     public DashboardSummary getDashboardSummary(String userId) {
-        logger.info("Retrieving dashboard summary for userId: {}", userId);
+        log.info("Retrieving dashboard summary for userId: {}", userId);
         
         DashboardSummary summary = appRepository.getDashboardSummary(userId);
         
         if (summary == null) {
-            logger.info("Dashboard summary not found, creating empty summary for userId: {}", userId);
+            log.info("Dashboard summary not found, creating empty summary for userId: {}", userId);
             summary = createEmptyDashboardSummary(userId);
             appRepository.saveDashboardSummary(summary);
         }

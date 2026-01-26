@@ -7,17 +7,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phantom.model.entity.Ghost;
 import com.phantom.service.GhostService;
 import com.phantom.util.ResponseBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class GhostController {
     
-    private static final Logger logger = LoggerFactory.getLogger(GhostController.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
     
     private final GhostService ghostService;
@@ -45,7 +44,7 @@ public class GhostController {
             
             return ResponseBuilder.ok(response);
         } catch (Exception e) {
-            logger.error("Error listing ghosts", e);
+            log.error("Error listing ghosts", e);
             return ResponseBuilder.internalServerError("Failed to list ghosts");
         }
     }
@@ -73,7 +72,7 @@ public class GhostController {
             
             return ResponseBuilder.created(mapGhostToResponse(ghost));
         } catch (Exception e) {
-            logger.error("Error creating ghost", e);
+            log.error("Error creating ghost", e);
             return ResponseBuilder.internalServerError("Failed to create ghost");
         }
     }
@@ -97,7 +96,7 @@ public class GhostController {
             
             return ResponseBuilder.ok(mapGhostToResponse(ghost));
         } catch (Exception e) {
-            logger.error("Error retrieving ghost", e);
+            log.error("Error retrieving ghost", e);
             return ResponseBuilder.internalServerError("Failed to retrieve ghost");
         }
     }
@@ -128,7 +127,7 @@ public class GhostController {
             
             return ResponseBuilder.ok(mapGhostToResponse(ghost));
         } catch (Exception e) {
-            logger.error("Error updating ghost", e);
+            log.error("Error updating ghost", e);
             return ResponseBuilder.internalServerError("Failed to update ghost");
         }
     }

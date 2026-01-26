@@ -1,8 +1,7 @@
 package com.phantom.service;
 
 import com.phantom.repository.CacheRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -10,9 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class MarketDataService {
-    
-    private static final Logger logger = LoggerFactory.getLogger(MarketDataService.class);
     
     private final CacheRepository cacheRepository;
     
@@ -21,7 +19,7 @@ public class MarketDataService {
     }
     
     public Map<String, Object> getMarketQuote(String symbol) {
-        logger.info("Retrieving market quote for symbol: {}", symbol);
+        log.info("Retrieving market quote for symbol: {}", symbol);
         
         String normalizedSymbol = symbol.trim().toUpperCase();
         
@@ -35,7 +33,7 @@ public class MarketDataService {
     }
     
     public Map<String, Object> getMarketCandles(String symbol, String interval, String range) {
-        logger.info("Retrieving market candles for symbol: {}, interval: {}, range: {}", symbol, interval, range);
+        log.info("Retrieving market candles for symbol: {}, interval: {}, range: {}", symbol, interval, range);
         
         String normalizedSymbol = symbol.trim().toUpperCase();
         String effectiveInterval = interval != null ? interval : "1day";

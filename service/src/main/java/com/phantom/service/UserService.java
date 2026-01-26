@@ -3,15 +3,13 @@ package com.phantom.service;
 import com.phantom.model.entity.UserProfile;
 import com.phantom.repository.AppRepository;
 import com.phantom.util.Constants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.util.Map;
 
+@Slf4j
 public class UserService {
-    
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     
     private final AppRepository appRepository;
     
@@ -20,12 +18,12 @@ public class UserService {
     }
     
     public UserProfile getUserProfile(String userId) {
-        logger.info("Retrieving user profile for userId: {}", userId);
+        log.info("Retrieving user profile for userId: {}", userId);
         
         UserProfile profile = appRepository.getUserProfile(userId);
         
         if (profile == null) {
-            logger.info("User profile not found, creating new profile for userId: {}", userId);
+            log.info("User profile not found, creating new profile for userId: {}", userId);
             profile = createNewUserProfile(userId);
             appRepository.saveUserProfile(profile);
         }
@@ -34,7 +32,7 @@ public class UserService {
     }
     
     public UserProfile updateUserProfile(String userId, String timezone, Map<String, Object> settings) {
-        logger.info("Updating user profile for userId: {}", userId);
+        log.info("Updating user profile for userId: {}", userId);
         
         UserProfile profile = appRepository.getUserProfile(userId);
         
@@ -56,7 +54,7 @@ public class UserService {
     }
     
     public void deleteUserProfile(String userId) {
-        logger.info("Deleting user profile for userId: {}", userId);
+        log.info("Deleting user profile for userId: {}", userId);
         appRepository.deleteUserProfile(userId);
     }
     

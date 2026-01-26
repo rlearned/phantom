@@ -4,14 +4,12 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPResponse;
 import com.phantom.service.MarketDataService;
 import com.phantom.util.ResponseBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
+@Slf4j
 public class MarketController {
-    
-    private static final Logger logger = LoggerFactory.getLogger(MarketController.class);
     
     private final MarketDataService marketDataService;
     
@@ -31,7 +29,7 @@ public class MarketController {
             
             return ResponseBuilder.ok(quote);
         } catch (Exception e) {
-            logger.error("Error retrieving market quote", e);
+            log.error("Error retrieving market quote", e);
             return ResponseBuilder.internalServerError("Failed to retrieve market quote");
         }
     }
@@ -51,7 +49,7 @@ public class MarketController {
             
             return ResponseBuilder.ok(candles);
         } catch (Exception e) {
-            logger.error("Error retrieving market candles", e);
+            log.error("Error retrieving market candles", e);
             return ResponseBuilder.internalServerError("Failed to retrieve market candles");
         }
     }

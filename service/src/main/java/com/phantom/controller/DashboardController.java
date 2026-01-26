@@ -5,15 +5,13 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPResponse;
 import com.phantom.model.entity.DashboardSummary;
 import com.phantom.service.DashboardService;
 import com.phantom.util.ResponseBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class DashboardController {
-    
-    private static final Logger logger = LoggerFactory.getLogger(DashboardController.class);
     
     private final DashboardService dashboardService;
     
@@ -34,7 +32,7 @@ public class DashboardController {
             
             return ResponseBuilder.ok(response);
         } catch (Exception e) {
-            logger.error("Error retrieving dashboard summary", e);
+            log.error("Error retrieving dashboard summary", e);
             return ResponseBuilder.internalServerError("Failed to retrieve dashboard summary");
         }
     }
