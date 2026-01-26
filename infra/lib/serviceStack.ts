@@ -3,6 +3,9 @@ import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as logs from 'aws-cdk-lib/aws-logs';
+import * as apigatewayv2 from 'aws-cdk-lib/aws-apigatewayv2';
+import { HttpLambdaIntegration } from 'aws-cdk-lib/aws-apigatewayv2-integrations';
+import { HttpJwtAuthorizer } from 'aws-cdk-lib/aws-apigatewayv2-authorizers';
 import { Construct } from 'constructs';
 import * as path from 'path';
 
@@ -12,6 +15,7 @@ export class ServiceStack extends cdk.Stack {
   public readonly userPool: cognito.UserPool;
   public readonly userPoolClient: cognito.UserPoolClient;
   public readonly apiFunction: lambda.Function;
+  public readonly httpApi: apigatewayv2.HttpApi;
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -125,6 +129,93 @@ export class ServiceStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'ApiLambdaArn', {
       value: this.apiFunction.functionArn,
       description: 'Lambda function ARN',
+    });
+
+    const integration = new HttpLambdaIntegration('LambdaIntegration', this.apiFunction);
+
+    const authorizer = new HttpJwtAuthorizer('JwtAuthorizer', 
+      `https://cognito-idp.${this.region}.amazonaws.com/${this.userPool.userPoolId}`,
+      {
+        jwtAudience: [this.userPoolClient.userPoolClientId],
+      }
+    );
+
+    this.httpApi = new apigatewayv2.HttpApi(this, 'HttpApi', {
+      apiName: 'phantom-http-api',
+      description: 'Phantom HTTP API',
+      corsPreflight: {
+        allowOrigins: ['*'],
+        allowMethods: [apigatewayv2.CorsHttpMethod.ANY],
+        allowHeaders: ['*'],
+        maxAge: cdk.Duration.days(1),
+      },
+    });
+
+    this.httpApi.addRoutes({
+      path: '/v1/health',
+      methods: [apigatewayv2.HttpMethod.GET],
+      integration: integration,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/v1/me',
+      methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.PATCH, apigatewayv2.HttpMethod.DELETE],
+      integration: integration,
+      authorizer: authorizer,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/v1/ghosts',
+      methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.POST],
+      integration: integration,
+      authorizer: authorizer,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/v1/ghosts/{ghostId}',
+      methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.PATCH],
+      integration: integration,
+      authorizer: authorizer,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/v1/dashboard/summary',
+      methods: [apigatewayv2.HttpMethod.GET],
+      integration: integration,
+      authorizer: authorizer,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/v1/achievements',
+      methods: [apigatewayv2.HttpMethod.GET],
+      integration: integration,
+      authorizer: authorizer,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/v1/streaks',
+      methods: [apigatewayv2.HttpMethod.GET],
+      integration: integration,
+      authorizer: authorizer,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/v1/market/quote',
+      methods: [apigatewayv2.HttpMethod.GET],
+      integration: integration,
+      authorizer: authorizer,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/v1/market/candles',
+      methods: [apigatewayv2.HttpMethod.GET],
+      integration: integration,
+      authorizer: authorizer,
+    });
+
+    new cdk.CfnOutput(this, 'ApiUrl', {
+      value: this.httpApi.apiEndpoint,
+      description: 'API Gateway endpoint URL',
     });
   }
 }
