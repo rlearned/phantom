@@ -1,13 +1,17 @@
 import * as cdk from 'aws-cdk-lib';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as logs from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
+import * as path from 'path';
 
 export class ServiceStack extends cdk.Stack {
   public readonly appTable: dynamodb.Table;
   public readonly cacheTable: dynamodb.Table;
   public readonly userPool: cognito.UserPool;
   public readonly userPoolClient: cognito.UserPoolClient;
+  public readonly apiFunction: lambda.Function;
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -98,6 +102,29 @@ export class ServiceStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'UserPoolClientId', {
       value: this.userPoolClient.userPoolClientId,
       description: 'Cognito User Pool Client ID',
+    });
+
+    this.apiFunction = new lambda.Function(this, 'ApiFunction', {
+      functionName: 'phantom-lambda',
+      runtime: lambda.Runtime.JAVA_17,
+      architecture: lambda.Architecture.X86_64,
+      handler: 'com.phantom.handler.ApiHandler::handleRequest',
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../service/build/distributions/phantom-lambda.zip')),
+      memorySize: 512,
+      timeout: cdk.Duration.seconds(30),
+      environment: {
+        APP_TABLE_NAME: this.appTable.tableName,
+        CACHE_TABLE_NAME: this.cacheTable.tableName,
+      },
+      logRetention: logs.RetentionDays.TWO_WEEKS,
+    });
+
+    this.appTable.grantReadWriteData(this.apiFunction);
+    this.cacheTable.grantReadWriteData(this.apiFunction);
+
+    new cdk.CfnOutput(this, 'ApiLambdaArn', {
+      value: this.apiFunction.functionArn,
+      description: 'Lambda function ARN',
     });
   }
 }
