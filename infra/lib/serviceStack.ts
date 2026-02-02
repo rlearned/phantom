@@ -119,6 +119,7 @@ export class ServiceStack extends cdk.Stack {
       environment: {
         APP_TABLE_NAME: this.appTable.tableName,
         CACHE_TABLE_NAME: this.cacheTable.tableName,
+        TWELVE_DATA_API_KEY: process.env.TWELVE_DATA_API_KEY || '',
       },
       logRetention: logs.RetentionDays.TWO_WEEKS,
     });

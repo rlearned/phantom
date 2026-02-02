@@ -7,6 +7,7 @@ public final class Constants {
     
     public static final String APP_TABLE_NAME = System.getenv().getOrDefault("APP_TABLE_NAME", "phantom-app");
     public static final String CACHE_TABLE_NAME = System.getenv().getOrDefault("CACHE_TABLE_NAME", "phantom-cache");
+    public static final String TWELVE_DATA_API_KEY = System.getenv().getOrDefault("TWELVE_DATA_API_KEY", "");
     
     public static final String PK_USER_PREFIX = "USER#";
     public static final String SK_PROFILE = "PROFILE";
