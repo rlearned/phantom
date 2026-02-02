@@ -67,32 +67,36 @@ public class AppRepository extends DynamoDbRepository {
     
     public void saveGhost(Ghost ghost) {
         Map<String, AttributeValue> item = new HashMap<>();
-        item.put("pk", AttributeValue.builder().s(ghost.getPk()).build());
-        item.put("sk", AttributeValue.builder().s(ghost.getSk()).build());
-        item.put("entityType", AttributeValue.builder().s(ghost.getEntityType()).build());
-        item.put("ghostId", AttributeValue.builder().s(ghost.getGhostId()).build());
-        item.put("userId", AttributeValue.builder().s(ghost.getUserId()).build());
-        item.put("createdAtEpochMs", AttributeValue.builder().n(ghost.getCreatedAtEpochMs().toString()).build());
-        item.put("ticker", AttributeValue.builder().s(ghost.getTicker()).build());
-        item.put("direction", AttributeValue.builder().s(ghost.getDirection()).build());
-        item.put("intendedPrice", AttributeValue.builder().n(ghost.getIntendedPrice().toString()).build());
-        item.put("intendedSize", AttributeValue.builder().n(ghost.getIntendedSize().toString()).build());
-        item.put("status", AttributeValue.builder().s(ghost.getStatus()).build());
-        item.put("loggedQuote", convertMapToAttributeValue(ghost.getLoggedQuote()));
+        item.put(Constants.ATTR_PK, AttributeValue.builder().s(ghost.getPk()).build());
+        item.put(Constants.ATTR_SK, AttributeValue.builder().s(ghost.getSk()).build());
+        item.put(Constants.ATTR_ENTITY_TYPE, AttributeValue.builder().s(ghost.getEntityType()).build());
+        item.put(Constants.ATTR_GHOST_ID, AttributeValue.builder().s(ghost.getGhostId()).build());
+        item.put(Constants.ATTR_USER_ID, AttributeValue.builder().s(ghost.getUserId()).build());
+        item.put(Constants.ATTR_CREATED_AT_EPOCH_MS, AttributeValue.builder().n(ghost.getCreatedAtEpochMs().toString()).build());
+        item.put(Constants.ATTR_TICKER, AttributeValue.builder().s(ghost.getTicker()).build());
+        item.put(Constants.ATTR_DIRECTION, AttributeValue.builder().s(ghost.getDirection()).build());
+        item.put(Constants.ATTR_PRICE_SOURCE, AttributeValue.builder().s(ghost.getPriceSource()).build());
+        item.put(Constants.ATTR_QUANTITY_TYPE, AttributeValue.builder().s(ghost.getQuantityType()).build());
+        item.put(Constants.ATTR_INTENDED_PRICE, AttributeValue.builder().n(ghost.getIntendedPrice().toString()).build());
+        item.put(Constants.ATTR_INTENDED_SHARES, AttributeValue.builder().n(ghost.getIntendedShares().toString()).build());
+        item.put(Constants.ATTR_INTENDED_DOLLARS, AttributeValue.builder().n(ghost.getIntendedDollars().toString()).build());
+        item.put(Constants.ATTR_CONSIDERED_AT, AttributeValue.builder().n(ghost.getConsideredAtEpochMs().toString()).build());
+        item.put(Constants.ATTR_STATUS, AttributeValue.builder().s(ghost.getStatus()).build());
+        item.put(Constants.ATTR_LOGGED_QUOTE, convertMapToAttributeValue(ghost.getLoggedQuote()));
         
         if (ghost.getHesitationTags() != null && !ghost.getHesitationTags().isEmpty()) {
             List<AttributeValue> tags = ghost.getHesitationTags().stream()
                     .map(tag -> AttributeValue.builder().s(tag).build())
                     .collect(Collectors.toList());
-            item.put("hesitationTags", AttributeValue.builder().l(tags).build());
+            item.put(Constants.ATTR_HESITATION_TAGS, AttributeValue.builder().l(tags).build());
         }
         
         if (ghost.getNoteText() != null) {
-            item.put("noteText", AttributeValue.builder().s(ghost.getNoteText()).build());
+            item.put(Constants.ATTR_NOTE_TEXT, AttributeValue.builder().s(ghost.getNoteText()).build());
         }
         
         if (ghost.getVoiceKey() != null) {
-            item.put("voiceKey", AttributeValue.builder().s(ghost.getVoiceKey()).build());
+            item.put(Constants.ATTR_VOICE_KEY, AttributeValue.builder().s(ghost.getVoiceKey()).build());
         }
         
         putItem(item);
@@ -162,21 +166,25 @@ public class AppRepository extends DynamoDbRepository {
     
     private Ghost mapToGhost(Map<String, AttributeValue> item) {
         Ghost ghost = new Ghost();
-        ghost.setPk(getStringAttribute(item, "pk"));
-        ghost.setSk(getStringAttribute(item, "sk"));
-        ghost.setEntityType(getStringAttribute(item, "entityType"));
-        ghost.setGhostId(getStringAttribute(item, "ghostId"));
-        ghost.setUserId(getStringAttribute(item, "userId"));
-        ghost.setCreatedAtEpochMs(getLongAttribute(item, "createdAtEpochMs"));
-        ghost.setTicker(getStringAttribute(item, "ticker"));
-        ghost.setDirection(getStringAttribute(item, "direction"));
-        ghost.setIntendedPrice(getDoubleAttribute(item, "intendedPrice"));
-        ghost.setIntendedSize(getDoubleAttribute(item, "intendedSize"));
-        ghost.setHesitationTags(getStringListAttribute(item, "hesitationTags"));
-        ghost.setNoteText(getStringAttribute(item, "noteText"));
-        ghost.setVoiceKey(getStringAttribute(item, "voiceKey"));
-        ghost.setStatus(getStringAttribute(item, "status"));
-        ghost.setLoggedQuote(getMapAttribute(item, "loggedQuote"));
+        ghost.setPk(getStringAttribute(item, Constants.ATTR_PK));
+        ghost.setSk(getStringAttribute(item, Constants.ATTR_SK));
+        ghost.setEntityType(getStringAttribute(item, Constants.ATTR_ENTITY_TYPE));
+        ghost.setGhostId(getStringAttribute(item, Constants.ATTR_GHOST_ID));
+        ghost.setUserId(getStringAttribute(item, Constants.ATTR_USER_ID));
+        ghost.setCreatedAtEpochMs(getLongAttribute(item, Constants.ATTR_CREATED_AT_EPOCH_MS));
+        ghost.setTicker(getStringAttribute(item, Constants.ATTR_TICKER));
+        ghost.setDirection(getStringAttribute(item, Constants.ATTR_DIRECTION));
+        ghost.setPriceSource(getStringAttribute(item, Constants.ATTR_PRICE_SOURCE));
+        ghost.setQuantityType(getStringAttribute(item, Constants.ATTR_QUANTITY_TYPE));
+        ghost.setIntendedPrice(getDoubleAttribute(item, Constants.ATTR_INTENDED_PRICE));
+        ghost.setIntendedShares(getDoubleAttribute(item, Constants.ATTR_INTENDED_SHARES));
+        ghost.setIntendedDollars(getDoubleAttribute(item, Constants.ATTR_INTENDED_DOLLARS));
+        ghost.setConsideredAtEpochMs(getLongAttribute(item, Constants.ATTR_CONSIDERED_AT));
+        ghost.setHesitationTags(getStringListAttribute(item, Constants.ATTR_HESITATION_TAGS));
+        ghost.setNoteText(getStringAttribute(item, Constants.ATTR_NOTE_TEXT));
+        ghost.setVoiceKey(getStringAttribute(item, Constants.ATTR_VOICE_KEY));
+        ghost.setStatus(getStringAttribute(item, Constants.ATTR_STATUS));
+        ghost.setLoggedQuote(getMapAttribute(item, Constants.ATTR_LOGGED_QUOTE));
         return ghost;
     }
     

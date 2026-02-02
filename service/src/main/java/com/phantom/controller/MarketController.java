@@ -45,7 +45,7 @@ public class MarketController {
             String interval = queryParams.get("interval");
             String range = queryParams.get("range");
             
-            Map<String, Object> candles = marketDataService.getMarketCandles(symbol, interval, range);
+            Map<String, Object> candles = marketDataService.getMarketCandlesStub(symbol, interval, range);
             
             return ResponseBuilder.ok(candles);
         } catch (Exception e) {

@@ -21,8 +21,12 @@ public class Ghost {
     private Long createdAtEpochMs;
     private String ticker;
     private String direction;
+    private String priceSource;
+    private String quantityType;
     private Double intendedPrice;
-    private Double intendedSize;
+    private Double intendedShares;
+    private Double intendedDollars;
+    private Long consideredAtEpochMs;
     private List<String> hesitationTags;
     private String noteText;
     private String voiceKey;

@@ -196,7 +196,14 @@ structure CreateGhostRequest {
     direction: String
 
     @required
+    priceSource: String
+
     intendedPrice: Double
+
+    consideredAtEpochMs: Long
+
+    @required
+    quantityType: String
 
     @required
     intendedSize: Double
