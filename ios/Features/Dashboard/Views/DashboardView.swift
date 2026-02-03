@@ -37,6 +37,7 @@ struct DashboardView: View {
                             Button(action: {
                                 AuthManager.shared.signOut()
                             }) {
+                                // TODO: Change this to Phantom logo
                                 Image(systemName: "person.circle")
                                     .font(.system(size: 32))
                                     .foregroundColor(.phantomPurple)
@@ -94,6 +95,7 @@ struct DashboardView: View {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Recent Ghosts")
                                 .phantomHeadlineStyle()
+                                .frame(maxWidth: .infinity, alignment: .center)
                             
                             if viewModel.isLoading {
                                 ProgressView()
@@ -115,6 +117,7 @@ struct DashboardView: View {
                                 Text("No ghosts yet. Start logging!")
                                     .font(.phantomBodyMedium)
                                     .foregroundColor(.phantomTextSecondary)
+                                    .frame(maxWidth: .infinity, alignment: .center)
                                     .padding()
                             }
                         }

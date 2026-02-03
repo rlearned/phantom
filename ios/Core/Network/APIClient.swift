@@ -40,7 +40,7 @@ class APIClient {
     static let shared = APIClient()
     
     // TODO: Replace with your actual API Gateway URL after deployment
-    private let baseURL = "https://your-api-gateway-url.amazonaws.com"
+    private let baseURL = "https://f1ozahnrtc.execute-api.us-east-1.amazonaws.com"
     
     private let session: URLSession
     
@@ -182,4 +182,7 @@ class APIClient {
     func healthCheck() async throws -> [String: String] {
         return try await self.request(endpoint: "/v1/health", requiresAuth: false)
     }
+    
+    // TODO: Need a end point function for v1/market/candles
+    
 }
