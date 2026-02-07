@@ -55,6 +55,7 @@ struct Step1View: View {
                                 viewModel.direction = "BUY"
                             }
                         )
+                        .frame(maxWidth: .infinity)
                         
                         PhantomSmallButton(
                             title: "Sell",
@@ -63,6 +64,7 @@ struct Step1View: View {
                                 viewModel.direction = "SELL"
                             }
                         )
+                        .frame(maxWidth: .infinity)
                     }
                     
                     // Share Size Input

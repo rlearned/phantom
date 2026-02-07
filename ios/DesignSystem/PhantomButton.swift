@@ -93,6 +93,7 @@ struct PhantomSmallButton: View {
     var body: some View {
         Button(action: action) {
             Text(title)
+                .frame(maxWidth: .infinity)
                 .font(.phantomBodyMedium)
                 .foregroundColor(isSelected ? .phantomWhite : .phantomTextSecondary)
                 .padding(.horizontal, 16)
