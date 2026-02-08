@@ -102,9 +102,15 @@ struct GhostDetailView: View {
                                 .font(.phantomHeadline)
                                 .foregroundColor(.phantomTextPrimary)
                             
-                            Text(String(format: "%.2f shares", ghost.intendedSize))
-                                .font(.phantomBodyMedium)
-                                .foregroundColor(.phantomTextSecondary)
+                            if let shares = ghost.intendedShares {
+                                Text(String(format: "%.2f shares", shares))
+                                    .font(.phantomBodyMedium)
+                                    .foregroundColor(.phantomTextSecondary)
+                            } else if let dollars = ghost.intendedDollars {
+                                Text(String(format: "$%.2f", dollars))
+                                    .font(.phantomBodyMedium)
+                                    .foregroundColor(.phantomTextSecondary)
+                            }
                         }
                     }
                     

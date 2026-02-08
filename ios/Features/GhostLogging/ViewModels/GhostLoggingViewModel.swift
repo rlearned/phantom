@@ -13,7 +13,10 @@ import Combine
 class GhostLoggingViewModel: ObservableObject {
     @Published var ticker = ""
     @Published var direction = "BUY"
-    @Published var shareSizeText = ""
+    @Published var priceSource = "MARKET"        // "MANUAL" or "MARKET"
+    @Published var quantityType = "SHARES"       // "SHARES" or "DOLLARS"
+    @Published var intendedPriceText = ""        // manual price entry (scenarios A/B)
+    @Published var quantityText = ""             // shares or dollar amount
     @Published var selectedTags: [String] = []
     @Published var noteText = ""
     @Published var isLoading = false
@@ -22,16 +25,25 @@ class GhostLoggingViewModel: ObservableObject {
     
     private let apiClient = APIClient.shared
     
+    var intendedPriceValue: Double? {
+        Double(intendedPriceText)
+    }
+    
+    var quantityValue: Double? {
+        Double(quantityText)
+    }
+    
     var isStep1Valid: Bool {
-        !ticker.isEmpty && !shareSizeText.isEmpty && shareSize > 0
+        guard !ticker.isEmpty else { return false }
+        guard let qty = quantityValue, qty > 0 else { return false }
+        if priceSource == "MANUAL" {
+            guard let price = intendedPriceValue, price > 0 else { return false }
+        }
+        return true
     }
     
     var isStep2Valid: Bool {
         !selectedTags.isEmpty
-    }
-    
-    var shareSize: Double {
-        Double(shareSizeText) ?? 0
     }
     
     func createGhost() async {
@@ -44,15 +56,25 @@ class GhostLoggingViewModel: ObservableObject {
         errorMessage = nil
         
         do {
-            // First, fetch current market price
-            let quote = try await apiClient.getMarketQuote(symbol: ticker)
+            // Determine the intended price
+            let price: Double
+            if priceSource == "MANUAL", let manualPrice = intendedPriceValue {
+                price = manualPrice
+            } else {
+                // Fetch current market price for MARKET price source
+                let quote = try await apiClient.getMarketQuote(symbol: ticker)
+                price = quote.price
+            }
             
-            // Create ghost with fetched price
+            // Build request with correct quantity fields
             let request = CreateGhostRequest(
                 ticker: ticker.uppercased(),
                 direction: direction,
-                intendedPrice: quote.price,
-                intendedSize: shareSize,
+                priceSource: priceSource,
+                quantityType: quantityType,
+                intendedPrice: price,
+                intendedShares: quantityType == "SHARES" ? quantityValue : nil,
+                intendedDollars: quantityType == "DOLLARS" ? quantityValue : nil,
                 hesitationTags: selectedTags.isEmpty ? nil : selectedTags,
                 noteText: noteText.isEmpty ? nil : noteText,
                 voiceKey: nil

@@ -67,15 +67,88 @@ struct Step1View: View {
                         .frame(maxWidth: .infinity)
                     }
                     
-                    // Share Size Input
+                    // Price Source Selection
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Number of shares")
+                        Text("Price")
                             .font(.phantomCaption)
                             .foregroundColor(.phantomTextSecondary)
                         
-                        TextField("Enter quantity", text: $viewModel.shareSizeText)
-                            .textFieldStyle(PhantomTextFieldStyle())
-                            .keyboardType(.decimalPad)
+                        HStack(spacing: 16) {
+                            PhantomSmallButton(
+                                title: "Current Price",
+                                isSelected: viewModel.priceSource == "MARKET",
+                                action: {
+                                    viewModel.priceSource = "MARKET"
+                                    viewModel.intendedPriceText = ""
+                                }
+                            )
+                            .frame(maxWidth: .infinity)
+                            
+                            PhantomSmallButton(
+                                title: "Enter Price",
+                                isSelected: viewModel.priceSource == "MANUAL",
+                                action: {
+                                    viewModel.priceSource = "MANUAL"
+                                }
+                            )
+                            .frame(maxWidth: .infinity)
+                        }
+                    }
+                    
+                    // Manual Price Input (only visible when "Enter Price" selected)
+                    if viewModel.priceSource == "MANUAL" {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Price per share")
+                                .font(.phantomCaption)
+                                .foregroundColor(.phantomTextSecondary)
+                            
+                            TextField("Enter price", text: $viewModel.intendedPriceText)
+                                .textFieldStyle(PhantomTextFieldStyle())
+                                .keyboardType(.decimalPad)
+                        }
+                    }
+                    
+                    // Quantity Type Selection
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Quantity")
+                            .font(.phantomCaption)
+                            .foregroundColor(.phantomTextSecondary)
+                        
+                        HStack(spacing: 16) {
+                            PhantomSmallButton(
+                                title: "Shares",
+                                isSelected: viewModel.quantityType == "SHARES",
+                                action: {
+                                    viewModel.quantityType = "SHARES"
+                                    viewModel.quantityText = ""
+                                }
+                            )
+                            .frame(maxWidth: .infinity)
+                            
+                            PhantomSmallButton(
+                                title: "Dollars",
+                                isSelected: viewModel.quantityType == "DOLLARS",
+                                action: {
+                                    viewModel.quantityType = "DOLLARS"
+                                    viewModel.quantityText = ""
+                                }
+                            )
+                            .frame(maxWidth: .infinity)
+                        }
+                    }
+                    
+                    // Quantity Input (dynamic label based on quantityType)
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(viewModel.quantityType == "SHARES" ? "Number of shares" : "Dollar amount ($)")
+                            .font(.phantomCaption)
+                            .foregroundColor(.phantomTextSecondary)
+                        
+                        TextField(
+                            viewModel.quantityType == "SHARES" ? "Enter shares" : "Enter dollar amount",
+                            text: $viewModel.quantityText
+                        )
+                        .textFieldStyle(PhantomTextFieldStyle())
+                        .keyboardType(.decimalPad)
                     }
                 }
                 

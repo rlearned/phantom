@@ -16,9 +16,8 @@ struct Ghost: Codable, Identifiable {
     let priceSource: String
     let quantityType: String
     let intendedPrice: Double
-    let intendedShares: Double
-    let intendedDollars: Double
-    let consideredAtEpochMs: Int64?
+    let intendedShares: Double?
+    let intendedDollars: Double?
     let hesitationTags: [String]?
     let noteText: String?
     let voiceKey: String?
@@ -48,7 +47,7 @@ struct CreateGhostRequest: Codable {
     let direction: String
     let priceSource: String
     let quantityType: String
-    let intendedPrice: Double?
+    let intendedPrice: Double
     let intendedShares: Double?
     let intendedDollars: Double?
     let hesitationTags: [String]?
