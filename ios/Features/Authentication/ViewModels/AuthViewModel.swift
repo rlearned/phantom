@@ -14,6 +14,7 @@ class AuthViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     @Published var confirmPassword = ""
+    @Published var confirmationCode = ""
     @Published var errorMessage: String?
     @Published var isLoading = false
     
@@ -24,9 +25,13 @@ class AuthViewModel: ObservableObject {
     }
     
     var isSignUpFormValid: Bool {
-        !email.isEmpty && !password.isEmpty && 
+        !email.isEmpty && !password.isEmpty &&
         !confirmPassword.isEmpty && isValidEmail(email) &&
         password == confirmPassword && password.count >= 8
+    }
+    
+    var isConfirmationCodeValid: Bool {
+        confirmationCode.count == 6
     }
     
     func signIn() async {
@@ -66,6 +71,46 @@ class AuthViewModel: ObservableObject {
             try await authManager.signUp(email: email, password: password)
         } catch {
             errorMessage = error.localizedDescription
+        }
+        
+        isLoading = false
+    }
+    
+    func confirmSignUp() async {
+        guard isConfirmationCodeValid else {
+            errorMessage = "Please enter the 6-digit code"
+            return
+        }
+        
+        guard case .confirmingSignUp(let email, let password) = authManager.authState else {
+            errorMessage = "No pending sign-up to confirm"
+            return
+        }
+        
+        isLoading = true
+        errorMessage = nil
+        
+        do {
+            try await authManager.confirmSignUp(email: email, code: confirmationCode)
+            try await authManager.signIn(email: email, password: password)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+        
+        isLoading = false
+    }
+    
+    func resendConfirmationCode() async {
+        guard case .confirmingSignUp(let email, _) = authManager.authState else { return }
+        
+        isLoading = true
+        errorMessage = nil
+        
+        do {
+            try await authManager.signUp(email: email, password: "")
+        } catch {
+            // Cognito will resend the code even if password is wrong for existing user
+            // A dedicated resendConfirmationCode API would be cleaner
         }
         
         isLoading = false

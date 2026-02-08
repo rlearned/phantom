@@ -13,9 +13,12 @@ struct PhantomApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if authManager.isAuthenticated {
+            switch authManager.authState {
+            case .signedIn:
                 DashboardView()
-            } else {
+            case .confirmingSignUp:
+                ConfirmSignUpView()
+            case .signedOut:
                 LoginView()
             }
         }

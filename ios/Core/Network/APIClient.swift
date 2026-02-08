@@ -39,7 +39,6 @@ enum APIError: Error, LocalizedError {
 class APIClient {
     static let shared = APIClient()
     
-    // TODO: Replace with your actual API Gateway URL after deployment
     private let baseURL = "https://f1ozahnrtc.execute-api.us-east-1.amazonaws.com"
     
     private let session: URLSession
@@ -57,7 +56,8 @@ class APIClient {
         endpoint: String,
         method: String = "GET",
         body: Encodable? = nil,
-        requiresAuth: Bool = true
+        requiresAuth: Bool = true,
+        isRetry: Bool = false
     ) async throws -> T {
         guard let url = URL(string: baseURL + endpoint) else {
             throw APIError.invalidURL
@@ -67,7 +67,6 @@ class APIClient {
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        // Add auth token if required
         if requiresAuth {
             guard let token = AuthManager.shared.getAccessToken() else {
                 throw APIError.unauthorized
@@ -75,7 +74,6 @@ class APIClient {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         
-        // Encode body if present
         if let body = body {
             request.httpBody = try JSONEncoder().encode(body)
         }
@@ -96,6 +94,17 @@ class APIClient {
                     throw APIError.decodingError(error)
                 }
             case 401:
+                if !isRetry && requiresAuth {
+                    try await AuthManager.shared.refreshTokens()
+                    return try await self.request(
+                        endpoint: endpoint,
+                        method: method,
+                        body: body,
+                        requiresAuth: requiresAuth,
+                        isRetry: true
+                    )
+                }
+                AuthManager.shared.signOut()
                 throw APIError.unauthorized
             case 404:
                 throw APIError.notFound
