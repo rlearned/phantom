@@ -55,7 +55,8 @@ public final class Constants {
     public static final String REQUEST_KEY_INTENDED_PRICE = "intendedPrice";
     public static final String REQUEST_KEY_CONSIDERED_AT = "consideredAtEpochMs";
     public static final String REQUEST_KEY_QUANTITY_TYPE = "quantityType";
-    public static final String REQUEST_KEY_INTENDED_SIZE = "intendedSize";
+    public static final String REQUEST_KEY_INTENDED_SHARES = "intendedShares";
+    public static final String REQUEST_KEY_INTENDED_DOLLARS = "intendedDollars";
     public static final String REQUEST_KEY_HESITATION_TAGS = "hesitationTags";
     public static final String REQUEST_KEY_NOTE_TEXT = "noteText";
     public static final String REQUEST_KEY_VOICE_KEY = "voiceKey";
@@ -65,6 +66,11 @@ public final class Constants {
     public static final String RESPONSE_KEY_GHOST_ID = "ghostId";
     public static final String RESPONSE_KEY_USER_ID = "userId";
     public static final String RESPONSE_KEY_CREATED_AT = "createdAtEpochMs";
+    public static final String RESPONSE_KEY_PRICE_SOURCE = "priceSource";
+    public static final String RESPONSE_KEY_QUANTITY_TYPE = "quantityType";
+    public static final String RESPONSE_KEY_INTENDED_SHARES = "intendedShares";
+    public static final String RESPONSE_KEY_INTENDED_DOLLARS = "intendedDollars";
+    public static final String RESPONSE_KEY_CONSIDERED_AT = "consideredAtEpochMs";
     public static final String RESPONSE_KEY_LOGGED_QUOTE = "loggedQuote";
     public static final String RESPONSE_KEY_GHOSTS = "ghosts";
     

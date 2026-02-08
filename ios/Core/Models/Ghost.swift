@@ -13,8 +13,12 @@ struct Ghost: Codable, Identifiable {
     let createdAtEpochMs: Int64
     let ticker: String
     let direction: String
+    let priceSource: String
+    let quantityType: String
     let intendedPrice: Double
-    let intendedSize: Double
+    let intendedShares: Double
+    let intendedDollars: Double
+    let consideredAtEpochMs: Int64?
     let hesitationTags: [String]?
     let noteText: String?
     let voiceKey: String?
@@ -42,8 +46,11 @@ struct QuoteData: Codable {
 struct CreateGhostRequest: Codable {
     let ticker: String
     let direction: String
-    let intendedPrice: Double
-    let intendedSize: Double
+    let priceSource: String
+    let quantityType: String
+    let intendedPrice: Double?
+    let intendedShares: Double?
+    let intendedDollars: Double?
     let hesitationTags: [String]?
     let noteText: String?
     let voiceKey: String?

@@ -62,12 +62,31 @@ public class GhostController {
             String direction = json.get(Constants.REQUEST_KEY_DIRECTION).asText();
             String priceSource = json.get(Constants.REQUEST_KEY_PRICE_SOURCE).asText();
             String quantityType = json.get(Constants.REQUEST_KEY_QUANTITY_TYPE).asText();
-            Double intendedSize = json.get(Constants.REQUEST_KEY_INTENDED_SIZE).asDouble();
             
-            Double intendedPrice = json.has(Constants.REQUEST_KEY_INTENDED_PRICE) ? 
-                    json.get(Constants.REQUEST_KEY_INTENDED_PRICE).asDouble() : null;
-            Long consideredAtEpochMs = json.has(Constants.REQUEST_KEY_CONSIDERED_AT) ? 
-                    json.get(Constants.REQUEST_KEY_CONSIDERED_AT).asLong() : null;
+            Double intendedShares = json.has(Constants.REQUEST_KEY_INTENDED_SHARES) && !json.get(Constants.REQUEST_KEY_INTENDED_SHARES).isNull()
+                    ? json.get(Constants.REQUEST_KEY_INTENDED_SHARES).asDouble() : null;
+            Double intendedDollars = json.has(Constants.REQUEST_KEY_INTENDED_DOLLARS) && !json.get(Constants.REQUEST_KEY_INTENDED_DOLLARS).isNull()
+                    ? json.get(Constants.REQUEST_KEY_INTENDED_DOLLARS).asDouble() : null;
+            
+            Double intendedSize;
+            if (Constants.QUANTITY_TYPE_SHARES.equals(quantityType)) {
+                if (intendedShares == null) {
+                    throw new IllegalArgumentException("intendedShares required when quantityType is SHARES");
+                }
+                intendedSize = intendedShares;
+            } else if (Constants.QUANTITY_TYPE_DOLLARS.equals(quantityType)) {
+                if (intendedDollars == null) {
+                    throw new IllegalArgumentException("intendedDollars required when quantityType is DOLLARS");
+                }
+                intendedSize = intendedDollars;
+            } else {
+                throw new IllegalArgumentException("Invalid quantityType: " + quantityType);
+            }
+            
+            Double intendedPrice = json.has(Constants.REQUEST_KEY_INTENDED_PRICE) && !json.get(Constants.REQUEST_KEY_INTENDED_PRICE).isNull()
+                    ? json.get(Constants.REQUEST_KEY_INTENDED_PRICE).asDouble() : null;
+            Long consideredAtEpochMs = json.has(Constants.REQUEST_KEY_CONSIDERED_AT) && !json.get(Constants.REQUEST_KEY_CONSIDERED_AT).isNull()
+                    ? json.get(Constants.REQUEST_KEY_CONSIDERED_AT).asLong() : null;
             
             List<String> hesitationTags = null;
             if (json.has(Constants.REQUEST_KEY_HESITATION_TAGS)) {
@@ -158,8 +177,12 @@ public class GhostController {
         response.put(Constants.RESPONSE_KEY_CREATED_AT, ghost.getCreatedAtEpochMs());
         response.put(Constants.REQUEST_KEY_TICKER, ghost.getTicker());
         response.put(Constants.REQUEST_KEY_DIRECTION, ghost.getDirection());
+        response.put(Constants.RESPONSE_KEY_PRICE_SOURCE, ghost.getPriceSource());
+        response.put(Constants.RESPONSE_KEY_QUANTITY_TYPE, ghost.getQuantityType());
         response.put(Constants.REQUEST_KEY_INTENDED_PRICE, ghost.getIntendedPrice());
-        response.put(Constants.REQUEST_KEY_INTENDED_SIZE, ghost.getIntendedShares());
+        response.put(Constants.RESPONSE_KEY_INTENDED_SHARES, ghost.getIntendedShares());
+        response.put(Constants.RESPONSE_KEY_INTENDED_DOLLARS, ghost.getIntendedDollars());
+        response.put(Constants.RESPONSE_KEY_CONSIDERED_AT, ghost.getConsideredAtEpochMs());
         response.put(Constants.REQUEST_KEY_HESITATION_TAGS, ghost.getHesitationTags());
         response.put(Constants.REQUEST_KEY_NOTE_TEXT, ghost.getNoteText());
         response.put(Constants.REQUEST_KEY_VOICE_KEY, ghost.getVoiceKey());
