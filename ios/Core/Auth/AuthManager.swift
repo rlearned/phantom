@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 import Combine
-import AWSCognitoIdentityProvider
 
 enum AuthState {
     case signedOut
@@ -47,14 +46,10 @@ class AuthManager: ObservableObject {
         return false
     }
     
-    private let client: CognitoIdentityProviderClient
+    private let cognitoEndpoint = "https://cognito-idp.\(CognitoConfig.region).amazonaws.com"
+    private let session = URLSession.shared
     
     private init() {
-        let config = try! CognitoIdentityProviderClient.CognitoIdentityProviderClientConfiguration(
-            region: CognitoConfig.region
-        )
-        self.client = CognitoIdentityProviderClient(config: config)
-        
         if let token = getAccessToken(), !token.isEmpty {
             authState = .signedIn
             currentUserId = extractSubFromToken(token)
@@ -88,24 +83,57 @@ class AuthManager: ObservableObject {
         }
     }
     
+    // MARK: - Cognito HTTP API
+    
+    private func callCognito(target: String, payload: [String: Any]) async throws -> [String: Any] {
+        guard let url = URL(string: cognitoEndpoint) else {
+            throw AuthError.signInFailed("Invalid Cognito endpoint")
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/x-amz-json-1.1", forHTTPHeaderField: "Content-Type")
+        request.setValue("AWSCognitoIdentityProviderService.\(target)", forHTTPHeaderField: "X-Amz-Target")
+        request.httpBody = try JSONSerialization.data(withJSONObject: payload)
+        
+        let (data, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw AuthError.signInFailed("Invalid response")
+        }
+        
+        guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            throw AuthError.signInFailed("Failed to parse response")
+        }
+        
+        if httpResponse.statusCode != 200 {
+            let type = (json["__type"] as? String) ?? "UnknownError"
+            let message = (json["message"] as? String) ?? (json["Message"] as? String) ?? "Unknown error"
+            let shortType = type.components(separatedBy: "#").last ?? type
+            throw AuthError.signInFailed("\(shortType): \(message)")
+        }
+        
+        return json
+    }
+    
     // MARK: - Sign Up
     
     func signUp(email: String, password: String) async throws {
-        let input = SignUpInput(
-            clientId: CognitoConfig.clientId,
-            password: password,
-            userAttributes: [
-                CognitoIdentityProviderClientTypes.AttributeType(name: "email", value: email)
-            ],
-            username: email
-        )
+        let payload: [String: Any] = [
+            "ClientId": CognitoConfig.clientId,
+            "Username": email,
+            "Password": password,
+            "UserAttributes": [
+                ["Name": "email", "Value": email]
+            ]
+        ]
         
         do {
-            _ = try await client.signUp(input: input)
+            _ = try await callCognito(target: "SignUp", payload: payload)
             DispatchQueue.main.async {
                 self.authState = .confirmingSignUp(email: email, password: password)
             }
-        } catch let error as SignUpOutputError {
+        } catch let error as AuthError {
             throw AuthError.signUpFailed(error.localizedDescription)
         } catch {
             throw AuthError.signUpFailed(error.localizedDescription)
@@ -115,14 +143,14 @@ class AuthManager: ObservableObject {
     // MARK: - Confirm Sign Up
     
     func confirmSignUp(email: String, code: String) async throws {
-        let input = ConfirmSignUpInput(
-            clientId: CognitoConfig.clientId,
-            confirmationCode: code,
-            username: email
-        )
+        let payload: [String: Any] = [
+            "ClientId": CognitoConfig.clientId,
+            "Username": email,
+            "ConfirmationCode": code
+        ]
         
         do {
-            _ = try await client.confirmSignUp(input: input)
+            _ = try await callCognito(target: "ConfirmSignUp", payload: payload)
         } catch {
             throw AuthError.confirmationFailed(error.localizedDescription)
         }
@@ -131,22 +159,22 @@ class AuthManager: ObservableObject {
     // MARK: - Sign In
     
     func signIn(email: String, password: String) async throws {
-        let input = InitiateAuthInput(
-            authFlow: .userPasswordAuth,
-            authParameters: [
+        let payload: [String: Any] = [
+            "ClientId": CognitoConfig.clientId,
+            "AuthFlow": "USER_PASSWORD_AUTH",
+            "AuthParameters": [
                 "USERNAME": email,
-                "PASSWORD": password,
-            ],
-            clientId: CognitoConfig.clientId
-        )
+                "PASSWORD": password
+            ]
+        ]
         
         do {
-            let output = try await client.initiateAuth(input: input)
+            let json = try await callCognito(target: "InitiateAuth", payload: payload)
             
-            guard let result = output.authenticationResult,
-                  let accessToken = result.accessToken,
-                  let idToken = result.idToken,
-                  let refreshToken = result.refreshToken else {
+            guard let result = json["AuthenticationResult"] as? [String: Any],
+                  let accessToken = result["AccessToken"] as? String,
+                  let idToken = result["IdToken"] as? String,
+                  let refreshToken = result["RefreshToken"] as? String else {
                 throw AuthError.signInFailed("Missing tokens in auth response")
             }
             
@@ -171,26 +199,25 @@ class AuthManager: ObservableObject {
             throw AuthError.notSignedIn
         }
         
-        let input = InitiateAuthInput(
-            authFlow: .refreshTokenAuth,
-            authParameters: [
-                "REFRESH_TOKEN": refreshToken,
-            ],
-            clientId: CognitoConfig.clientId
-        )
+        let payload: [String: Any] = [
+            "ClientId": CognitoConfig.clientId,
+            "AuthFlow": "REFRESH_TOKEN_AUTH",
+            "AuthParameters": [
+                "REFRESH_TOKEN": refreshToken
+            ]
+        ]
         
         do {
-            let output = try await client.initiateAuth(input: input)
+            let json = try await callCognito(target: "InitiateAuth", payload: payload)
             
-            guard let result = output.authenticationResult,
-                  let accessToken = result.accessToken,
-                  let idToken = result.idToken else {
+            guard let result = json["AuthenticationResult"] as? [String: Any],
+                  let accessToken = result["AccessToken"] as? String,
+                  let idToken = result["IdToken"] as? String else {
                 throw AuthError.tokenRefreshFailed("Missing tokens in refresh response")
             }
             
             KeychainHelper.save(accessToken, for: .accessToken)
             KeychainHelper.save(idToken, for: .idToken)
-            // Refresh token is not returned on refresh — keep the existing one
             
             let userId = extractSubFromToken(idToken)
             DispatchQueue.main.async {
@@ -207,28 +234,28 @@ class AuthManager: ObservableObject {
     // MARK: - Reset Password
     
     func resetPassword(email: String) async throws {
-        let input = ForgotPasswordInput(
-            clientId: CognitoConfig.clientId,
-            username: email
-        )
+        let payload: [String: Any] = [
+            "ClientId": CognitoConfig.clientId,
+            "Username": email
+        ]
         
         do {
-            _ = try await client.forgotPassword(input: input)
+            _ = try await callCognito(target: "ForgotPassword", payload: payload)
         } catch {
             throw AuthError.resetPasswordFailed(error.localizedDescription)
         }
     }
     
     func confirmResetPassword(email: String, code: String, newPassword: String) async throws {
-        let input = ConfirmForgotPasswordInput(
-            clientId: CognitoConfig.clientId,
-            confirmationCode: code,
-            password: newPassword,
-            username: email
-        )
+        let payload: [String: Any] = [
+            "ClientId": CognitoConfig.clientId,
+            "Username": email,
+            "ConfirmationCode": code,
+            "Password": newPassword
+        ]
         
         do {
-            _ = try await client.confirmForgotPassword(input: input)
+            _ = try await callCognito(target: "ConfirmForgotPassword", payload: payload)
         } catch {
             throw AuthError.resetPasswordFailed(error.localizedDescription)
         }

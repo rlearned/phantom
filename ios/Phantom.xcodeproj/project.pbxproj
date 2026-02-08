@@ -10,7 +10,6 @@
 		C0901A022F4C80000045F545 /* CognitoConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A012F4C80000045F545 /* CognitoConfig.swift */; };
 		C0901A042F4C80000045F545 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A032F4C80000045F545 /* KeychainHelper.swift */; };
 		C0901A062F4C80000045F545 /* ConfirmSignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A052F4C80000045F545 /* ConfirmSignUpView.swift */; };
-		C0901A092F4C80000045F545 /* AWSCognitoIdentityProvider in Frameworks */ = {isa = PBXBuildFile; productRef = C0901A082F4C80000045F545 /* AWSCognitoIdentityProvider */; };
 		E5441A862F2D77700045F545 /* PhantomApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A872F2D77700045F545 /* PhantomApp.swift */; };
 		E5441A4B2F2D775D0045F545 /* Ghost.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A452F2D775D0045F545 /* Ghost.swift */; };
 		E5441A4C2F2D775D0045F545 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A422F2D775D0045F545 /* AuthManager.swift */; };
@@ -81,7 +80,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0901A092F4C80000045F545 /* AWSCognitoIdentityProvider in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +270,6 @@
 			);
 			name = Phantom;
 			packageProductDependencies = (
-				C0901A082F4C80000045F545 /* AWSCognitoIdentityProvider */,
 			);
 			productName = Phantom;
 			productReference = E5441A342F2D76DF0045F545 /* Phantom.app */;
@@ -303,7 +300,6 @@
 			mainGroup = E5441A2B2F2D76DF0045F545;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				C0901A072F4C80000045F545 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E5441A352F2D76DF0045F545 /* Products */;
@@ -566,24 +562,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		C0901A072F4C80000045F545 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/awslabs/aws-sdk-swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		C0901A082F4C80000045F545 /* AWSCognitoIdentityProvider */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C0901A072F4C80000045F545 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
-			productName = AWSCognitoIdentityProvider;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 	};
 	rootObject = E5441A2C2F2D76DF0045F545 /* Project object */;
