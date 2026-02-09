@@ -39,6 +39,26 @@ struct Step1View: View {
                             .font(.phantomBodySmall)
                             .foregroundColor(.phantomTextSecondary)
                             .textInputAutocapitalization(.characters)
+                            .onChange(of: viewModel.ticker) { _ in
+                                viewModel.isTickerValid = false
+                            }
+                        
+                        // Search button
+                        Button(action: {
+                            Task {
+                                await viewModel.validateTicker()
+                            }
+                        }) {
+                            if viewModel.isValidating {
+                                ProgressView()
+                                    .tint(.phantomTextSecondary)
+                            } else {
+                                Text("Search")
+                                    .font(.phantomCaption)
+                                    .foregroundColor(.phantomTextPrimary)
+                            }
+                        }
+                        .disabled(viewModel.ticker.trimmingCharacters(in: .whitespaces).isEmpty || viewModel.isValidating)
                     }
                     .padding(12)
                     .overlay(
@@ -46,6 +66,7 @@ struct Step1View: View {
                             .stroke(Color.phantomTextPrimary, lineWidth: 1)
                     )
                     
+                    if viewModel.isTickerValid {
                     // Direction Selection
                     HStack(spacing: 16) {
                         PhantomSmallButton(
@@ -144,26 +165,29 @@ struct Step1View: View {
                             .foregroundColor(.phantomTextSecondary)
                         
                         TextField(
-                            viewModel.quantityType == "SHARES" ? "Enter shares" : "Enter dollar amount",
+                            viewModel.quantityType == "SHARES" ? "Enter shares" : "Enter total dollar amount",
                             text: $viewModel.quantityText
                         )
                         .textFieldStyle(PhantomTextFieldStyle())
                         .keyboardType(.decimalPad)
                     }
+                    } // end if isTickerValid
                 }
                 
                 Spacer()
                 
-                // Next Button
-                PhantomButton(
-                    title: "Next",
-                    style: .primary,
-                    action: {
-                        navigateToStep2 = true
-                    },
-                    isEnabled: viewModel.isStep1Valid,
-                    fullWidth: true
-                )
+                // Next Button (only visible when ticker is validated)
+                if viewModel.isTickerValid {
+                    PhantomButton(
+                        title: "Next",
+                        style: .primary,
+                        action: {
+                            navigateToStep2 = true
+                        },
+                        isEnabled: viewModel.isStep1Valid,
+                        fullWidth: true
+                    )
+                }
             }
             .padding(.horizontal, 32)
             .padding(.top, 64)

@@ -19,6 +19,8 @@ class GhostLoggingViewModel: ObservableObject {
     @Published var quantityText = ""             // shares or dollar amount
     @Published var selectedTags: [String] = []
     @Published var noteText = ""
+    @Published var isTickerValid = false
+    @Published var isValidating = false
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var createdGhost: Ghost?
@@ -44,6 +46,28 @@ class GhostLoggingViewModel: ObservableObject {
     
     var isStep2Valid: Bool {
         !selectedTags.isEmpty
+    }
+    
+    /// Validates the ticker by calling the market quote API.
+    /// - TODO: Replace mock with actual getMarketQuote API call and validate response to determine if ticker is real.
+    ///         For example, if getMarketQuote returns an error or empty data, set isTickerValid = false.
+    func validateTicker() async {
+        guard !ticker.trimmingCharacters(in: .whitespaces).isEmpty else {
+            isTickerValid = false
+            return
+        }
+        
+        isValidating = true
+        errorMessage = nil
+        
+        // Mock: simulate API fetch delay (~1 second)
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        
+        // TODO: Actually call apiClient.getMarketQuote(symbol: ticker) here
+        // and use the response to decide validity. For now, always set to true.
+        isTickerValid = true
+        
+        isValidating = false
     }
     
     func createGhost() async {
