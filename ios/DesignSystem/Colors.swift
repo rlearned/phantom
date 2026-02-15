@@ -16,11 +16,38 @@ extension Color {
     // Background Colors
     static let phantomLightPurple = Color(hex: "F1F0FB")
     static let phantomBorderPurple = Color(hex: "E2E4FB")
+    static let phantomCardBackground = Color(hex: "E2E4FB")
     
     // Text Colors
     static let phantomTextPrimary = Color(hex: "000000")
     static let phantomTextSecondary = Color(hex: "000000").opacity(0.67)
     static let phantomTextTertiary = Color(hex: "000000").opacity(0.5)
+    static let phantomSecondaryDark = Color(hex: "1A1C1E")
+    
+    // Onboarding Colors
+    static let phantomGray = Color(hex: "6C7278")
+    static let phantomGreen = Color(hex: "0BAA36")
+    static let phantomTagBackground = Color(hex: "3803B1").opacity(0.1)
+    static let phantomTagBorder = Color(hex: "3803B1").opacity(0.15)
+    static let phantomInputBorder = Color(hex: "EDF1F3")
+    static let phantomGradientPurple = Color(hex: "7B61FF")
+    static let phantomLavender = Color(hex: "A49EF4")
+    static let phantomDarkGray = Color(hex: "3C3D3B")
+    static let phantomLightGray = Color(hex: "ACB5BB")
+    static let phantomSeparator = Color(hex: "EFF0F6")
+    
+    // Gradient
+    static let phantomPurpleGradient = LinearGradient(
+        colors: [Color(hex: "3803B1"), Color(hex: "7B61FF"), Color(hex: "A49EF4")],
+        startPoint: .leading,
+        endPoint: .trailing
+    )
+    
+    static let phantomButtonGradient = LinearGradient(
+        colors: [Color(hex: "3803B1"), Color(hex: "3803B1")],
+        startPoint: .top,
+        endPoint: .bottom
+    )
     
     // Helper initializer for hex colors
     init(hex: String) {

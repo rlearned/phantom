@@ -12,6 +12,7 @@ import Combine
 enum AuthState {
     case signedOut
     case confirmingSignUp(email: String, password: String)
+    case onboarding(email: String, password: String)
     case signedIn
 }
 

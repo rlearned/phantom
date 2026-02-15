@@ -7,10 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B000001AAAA00010045F545 /* PhantomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B000002AAAA00010045F545 /* PhantomTextField.swift */; };
+		0B000003AAAA00010045F545 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B000004AAAA00010045F545 /* OnboardingViewModel.swift */; };
+		0B000005AAAA00010045F545 /* OnboardingProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B000006AAAA00010045F545 /* OnboardingProgressBar.swift */; };
+		0B000007AAAA00010045F545 /* OnboardingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B000008AAAA00010045F545 /* OnboardingCard.swift */; };
+		0B000009AAAA00010045F545 /* OnboardingNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B00000AAAAA00010045F545 /* OnboardingNavigationBar.swift */; };
+		0B00000BAAAA00010045F545 /* ExampleGhostTradeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B00000CAAAA00010045F545 /* ExampleGhostTradeCard.swift */; };
+		0B00000DAAAA00010045F545 /* OnboardingOpeningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B00000EAAAA00010045F545 /* OnboardingOpeningView.swift */; };
+		0B00000FAAAA00010045F545 /* OnboardingStep1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B000010AAAA00010045F545 /* OnboardingStep1View.swift */; };
+		0B000011AAAA00010045F545 /* OnboardingStep2View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B000012AAAA00010045F545 /* OnboardingStep2View.swift */; };
+		0B000013AAAA00010045F545 /* OnboardingStep3View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B000014AAAA00010045F545 /* OnboardingStep3View.swift */; };
+		0B000015AAAA00010045F545 /* OnboardingStep4View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B000016AAAA00010045F545 /* OnboardingStep4View.swift */; };
+		0B000017AAAA00010045F545 /* OnboardingContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B000018AAAA00010045F545 /* OnboardingContainerView.swift */; };
 		C0901A022F4C80000045F545 /* CognitoConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A012F4C80000045F545 /* CognitoConfig.swift */; };
 		C0901A042F4C80000045F545 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A032F4C80000045F545 /* KeychainHelper.swift */; };
 		C0901A062F4C80000045F545 /* ConfirmSignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A052F4C80000045F545 /* ConfirmSignUpView.swift */; };
-		E5441A862F2D77700045F545 /* PhantomApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A872F2D77700045F545 /* PhantomApp.swift */; };
 		E5441A4B2F2D775D0045F545 /* Ghost.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A452F2D775D0045F545 /* Ghost.swift */; };
 		E5441A4C2F2D775D0045F545 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A422F2D775D0045F545 /* AuthManager.swift */; };
 		E5441A4D2F2D775D0045F545 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A482F2D775D0045F545 /* APIClient.swift */; };
@@ -33,9 +44,25 @@
 		E5441A832F2D776A0045F545 /* Step1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A742F2D776A0045F545 /* Step1View.swift */; };
 		E5441A842F2D776A0045F545 /* GhostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A6B2F2D776A0045F545 /* GhostListView.swift */; };
 		E5441A852F2D776A0045F545 /* EmotionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A702F2D776A0045F545 /* EmotionView.swift */; };
+		E5441A862F2D77700045F545 /* PhantomApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A872F2D77700045F545 /* PhantomApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0B000002AAAA00010045F545 /* PhantomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhantomTextField.swift; sourceTree = "<group>"; };
+		0B000004AAAA00010045F545 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
+		0B000006AAAA00010045F545 /* OnboardingProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingProgressBar.swift; sourceTree = "<group>"; };
+		0B000008AAAA00010045F545 /* OnboardingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCard.swift; sourceTree = "<group>"; };
+		0B00000AAAAA00010045F545 /* OnboardingNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNavigationBar.swift; sourceTree = "<group>"; };
+		0B00000CAAAA00010045F545 /* ExampleGhostTradeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleGhostTradeCard.swift; sourceTree = "<group>"; };
+		0B00000EAAAA00010045F545 /* OnboardingOpeningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingOpeningView.swift; sourceTree = "<group>"; };
+		0B000010AAAA00010045F545 /* OnboardingStep1View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStep1View.swift; sourceTree = "<group>"; };
+		0B000012AAAA00010045F545 /* OnboardingStep2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStep2View.swift; sourceTree = "<group>"; };
+		0B000014AAAA00010045F545 /* OnboardingStep3View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStep3View.swift; sourceTree = "<group>"; };
+		0B000016AAAA00010045F545 /* OnboardingStep4View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStep4View.swift; sourceTree = "<group>"; };
+		0B000018AAAA00010045F545 /* OnboardingContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainerView.swift; sourceTree = "<group>"; };
+		C0901A012F4C80000045F545 /* CognitoConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoConfig.swift; sourceTree = "<group>"; };
+		C0901A032F4C80000045F545 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		C0901A052F4C80000045F545 /* ConfirmSignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmSignUpView.swift; sourceTree = "<group>"; };
 		E5441A342F2D76DF0045F545 /* Phantom.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Phantom.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5441A422F2D775D0045F545 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		E5441A442F2D775D0045F545 /* DashboardSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSummary.swift; sourceTree = "<group>"; };
@@ -62,9 +89,6 @@
 		E5441A872F2D77700045F545 /* PhantomApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhantomApp.swift; sourceTree = "<group>"; };
 		E5441A882F2D77700045F545 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E5441A892F2D77700045F545 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C0901A012F4C80000045F545 /* CognitoConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoConfig.swift; sourceTree = "<group>"; };
-		C0901A032F4C80000045F545 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
-		C0901A052F4C80000045F545 /* ConfirmSignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmSignUpView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -86,6 +110,48 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B200001AAAA00010045F545 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				0B200002AAAA00010045F545 /* ViewModels */,
+				0B200003AAAA00010045F545 /* Components */,
+				0B200004AAAA00010045F545 /* Views */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		0B200002AAAA00010045F545 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				0B000004AAAA00010045F545 /* OnboardingViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		0B200003AAAA00010045F545 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				0B000006AAAA00010045F545 /* OnboardingProgressBar.swift */,
+				0B000008AAAA00010045F545 /* OnboardingCard.swift */,
+				0B00000AAAAA00010045F545 /* OnboardingNavigationBar.swift */,
+				0B00000CAAAA00010045F545 /* ExampleGhostTradeCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		0B200004AAAA00010045F545 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0B00000EAAAA00010045F545 /* OnboardingOpeningView.swift */,
+				0B000010AAAA00010045F545 /* OnboardingStep1View.swift */,
+				0B000012AAAA00010045F545 /* OnboardingStep2View.swift */,
+				0B000014AAAA00010045F545 /* OnboardingStep3View.swift */,
+				0B000016AAAA00010045F545 /* OnboardingStep4View.swift */,
+				0B000018AAAA00010045F545 /* OnboardingContainerView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		E5441A2B2F2D76DF0045F545 = {
 			isa = PBXGroup;
 			children = (
@@ -151,6 +217,7 @@
 			children = (
 				E5441A592F2D77660045F545 /* Colors.swift */,
 				E5441A5A2F2D77660045F545 /* PhantomButton.swift */,
+				0B000002AAAA00010045F545 /* PhantomTextField.swift */,
 				E5441A5B2F2D77660045F545 /* ProgressIndicator.swift */,
 				E5441A5C2F2D77660045F545 /* Typography.swift */,
 			);
@@ -246,6 +313,7 @@
 				E5441A672F2D776A0045F545 /* Authentication */,
 				E5441A6D2F2D776A0045F545 /* Dashboard */,
 				E5441A772F2D776A0045F545 /* GhostLogging */,
+				0B200001AAAA00010045F545 /* Onboarding */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -352,6 +420,18 @@
 				C0901A022F4C80000045F545 /* CognitoConfig.swift in Sources */,
 				C0901A042F4C80000045F545 /* KeychainHelper.swift in Sources */,
 				C0901A062F4C80000045F545 /* ConfirmSignUpView.swift in Sources */,
+				0B000001AAAA00010045F545 /* PhantomTextField.swift in Sources */,
+				0B000003AAAA00010045F545 /* OnboardingViewModel.swift in Sources */,
+				0B000005AAAA00010045F545 /* OnboardingProgressBar.swift in Sources */,
+				0B000007AAAA00010045F545 /* OnboardingCard.swift in Sources */,
+				0B000009AAAA00010045F545 /* OnboardingNavigationBar.swift in Sources */,
+				0B00000BAAAA00010045F545 /* ExampleGhostTradeCard.swift in Sources */,
+				0B00000DAAAA00010045F545 /* OnboardingOpeningView.swift in Sources */,
+				0B00000FAAAA00010045F545 /* OnboardingStep1View.swift in Sources */,
+				0B000011AAAA00010045F545 /* OnboardingStep2View.swift in Sources */,
+				0B000013AAAA00010045F545 /* OnboardingStep3View.swift in Sources */,
+				0B000015AAAA00010045F545 /* OnboardingStep4View.swift in Sources */,
+				0B000017AAAA00010045F545 /* OnboardingContainerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -561,8 +641,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-
 	};
 	rootObject = E5441A2C2F2D76DF0045F545 /* Project object */;
 }

@@ -18,6 +18,8 @@ struct PhantomApp: App {
                 DashboardView()
             case .confirmingSignUp:
                 ConfirmSignUpView()
+            case .onboarding:
+                OnboardingContainerView()
             case .signedOut:
                 LoginView()
             }
