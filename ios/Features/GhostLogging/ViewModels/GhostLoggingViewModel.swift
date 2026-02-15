@@ -48,9 +48,7 @@ class GhostLoggingViewModel: ObservableObject {
         !selectedTags.isEmpty
     }
     
-    /// Validates the ticker by calling the market quote API.
-    /// - TODO: Replace mock with actual getMarketQuote API call and validate response to determine if ticker is real.
-    ///         For example, if getMarketQuote returns an error or empty data, set isTickerValid = false.
+    //TODO: Replace this mock with actual API call, and include logic to validate the ticker
     func validateTicker() async {
         guard !ticker.trimmingCharacters(in: .whitespaces).isEmpty else {
             isTickerValid = false
@@ -64,7 +62,6 @@ class GhostLoggingViewModel: ObservableObject {
         try? await Task.sleep(nanoseconds: 1_000_000_000)
         
         // TODO: Actually call apiClient.getMarketQuote(symbol: ticker) here
-        // and use the response to decide validity. For now, always set to true.
         isTickerValid = true
         
         isValidating = false
