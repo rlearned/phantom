@@ -39,7 +39,7 @@ enum APIError: Error, LocalizedError {
 class APIClient {
     static let shared = APIClient()
     
-    private let baseURL = "https://f1ozahnrtc.execute-api.us-east-1.amazonaws.com"
+    private let baseURL = "https://14afbieyig.execute-api.us-east-1.amazonaws.com"
     
     private let session: URLSession
     
