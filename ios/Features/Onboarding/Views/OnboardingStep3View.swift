@@ -49,14 +49,6 @@ struct OnboardingStep3View: View {
                 .padding(.horizontal, 28)
                 
                 Spacer()
-                
-                VStack {
-                    OnboardingNavigationBar(
-                        currentPage: 3,
-                        totalPages: 5,
-                        onPrevious: {},
-                        onNext: {})
-                }
             }
         }
     }

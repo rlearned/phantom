@@ -57,18 +57,18 @@ struct OnboardingOpeningView: View {
                     Spacer()
                     
                     // Tap to continue
-                    Button(action: onNext) {
-                        VStack(spacing: 8) {
-                            Image(systemName: "chevron.up")
-                                .font(.system(size: 20, weight: .medium))
-                                .foregroundColor(.phantomPurple)
-                            
-                            Text("Tap to continue")
-                                .font(.phantomBodySmall)
-                                .foregroundColor(.phantomGray)
-                        }
-                    }
-                    .padding(.bottom, 60)
+//                    Button(action: onNext) {
+//                        VStack(spacing: 8) {
+//                            Image(systemName: "chevron.up")
+//                                .font(.system(size: 20, weight: .medium))
+//                                .foregroundColor(.phantomPurple)
+//                            
+//                            Text("Tap to continue")
+//                                .font(.phantomBodySmall)
+//                                .foregroundColor(.phantomGray)
+//                        }
+//                    }
+//                    .padding(.bottom, 60)
                 }
             }
         }
