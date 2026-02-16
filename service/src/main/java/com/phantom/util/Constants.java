@@ -7,7 +7,8 @@ public final class Constants {
     
     public static final String APP_TABLE_NAME = System.getenv().getOrDefault("APP_TABLE_NAME", "phantom-app");
     public static final String CACHE_TABLE_NAME = System.getenv().getOrDefault("CACHE_TABLE_NAME", "phantom-cache");
-    public static final String TWELVE_DATA_API_KEY = System.getenv().getOrDefault("TWELVE_DATA_API_KEY", "");
+    public static final String ALPACA_API_KEY_ID = System.getenv().getOrDefault("ALPACA_API_KEY_ID", "");
+    public static final String ALPACA_API_SECRET_KEY = System.getenv().getOrDefault("ALPACA_API_SECRET_KEY", "");
     
     public static final String PK_USER_PREFIX = "USER#";
     public static final String SK_PROFILE = "PROFILE";
@@ -40,7 +41,7 @@ public final class Constants {
     
     public static final String PLAN_FREE = "FREE";
     
-    public static final String SOURCE_TWELVE_DATA = "twelve_data";
+    public static final String SOURCE_ALPACA = "alpaca";
     public static final String SOURCE_MANUAL = "MANUAL";
     
     public static final String QUOTE_KEY_SYMBOL = "symbol";
@@ -48,7 +49,17 @@ public final class Constants {
     public static final String QUOTE_KEY_PROVIDER_TS = "providerTs";
     public static final String QUOTE_KEY_CAPTURED_AT = "capturedAtEpochMs";
     public static final String QUOTE_KEY_SOURCE = "source";
-    
+    public static final String QUOTE_KEY_FETCHED_AT = "fetchedAt";
+
+    public static final String CANDLE_KEY_INTERVAL = "interval";
+    public static final String CANDLE_KEY_CANDLES = "candles";
+    public static final String CANDLE_KEY_DATETIME = "datetime";
+    public static final String CANDLE_KEY_OPEN = "open";
+    public static final String CANDLE_KEY_HIGH = "high";
+    public static final String CANDLE_KEY_LOW = "low";
+    public static final String CANDLE_KEY_CLOSE = "close";
+    public static final String CANDLE_KEY_VOLUME = "volume";
+
     public static final String REQUEST_KEY_TICKER = "ticker";
     public static final String REQUEST_KEY_DIRECTION = "direction";
     public static final String REQUEST_KEY_PRICE_SOURCE = "priceSource";

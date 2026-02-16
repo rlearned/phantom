@@ -36,9 +36,9 @@ public class ApiHandler implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
         CacheRepository cacheRepository = new CacheRepository(dynamoDbClient);
         
         UserService userService = new UserService(appRepository);
-        GhostService ghostService = new GhostService(appRepository, cacheRepository);
-        DashboardService dashboardService = new DashboardService(appRepository);
         MarketDataService marketDataService = new MarketDataService(cacheRepository);
+        GhostService ghostService = new GhostService(appRepository, marketDataService);
+        DashboardService dashboardService = new DashboardService(appRepository);
         
         this.userController = new UserController(userService);
         this.ghostController = new GhostController(ghostService);

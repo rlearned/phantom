@@ -3,7 +3,6 @@ package com.phantom.service;
 import com.phantom.model.entity.DashboardSummary;
 import com.phantom.model.entity.Ghost;
 import com.phantom.repository.AppRepository;
-import com.phantom.repository.CacheRepository;
 import com.phantom.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,15 +15,13 @@ import java.util.UUID;
 public class GhostService {
 
     private static final String NO_PROVIDER_TS = "";
-    
+
     private final AppRepository appRepository;
-    private final CacheRepository cacheRepository;
     private final MarketDataService marketDataService;
-    
-    public GhostService(AppRepository appRepository, CacheRepository cacheRepository) {
+
+    public GhostService(AppRepository appRepository, MarketDataService marketDataService) {
         this.appRepository = appRepository;
-        this.cacheRepository = cacheRepository;
-        this.marketDataService = new MarketDataService(cacheRepository);
+        this.marketDataService = marketDataService;
     }
     
     public Ghost createGhost(String userId, String ticker, String direction, String priceSource,
