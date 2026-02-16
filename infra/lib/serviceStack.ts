@@ -61,6 +61,7 @@ export class ServiceStack extends cdk.Stack {
 
     this.userPool = new cognito.UserPool(this, 'UserPool', {
       userPoolName: 'phantom-users',
+      selfSignUpEnabled: true,
       signInAliases: {
         email: true,
       },
