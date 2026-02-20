@@ -144,13 +144,10 @@ struct Step2View: View {
                     style: .primary,
                     action: {
                         Task {
-//                            await viewModel.createGhost()
-//                            if viewModel.createdGhost != nil {
-//                                navigateToSuccess = true
-//                            }
-                            
-                            // Below is placeholder for testing
-                            navigateToSuccess = true
+                            await viewModel.createGhost()
+                            if viewModel.createdGhost != nil {
+                                navigateToSuccess = true
+                            }
                         }
                     },
                     isEnabled: !viewModel.isLoading && viewModel.isStep2Valid,
