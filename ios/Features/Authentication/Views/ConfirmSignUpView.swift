@@ -17,8 +17,9 @@ struct ConfirmSignUpView: View {
             VStack(spacing: 32) {
                 Spacer()
                 
-                Circle()
-                    .fill(Color.phantomPurple)
+                Image("Logo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
                     .frame(width: 64, height: 64)
                 
                 Text("Verify Email")

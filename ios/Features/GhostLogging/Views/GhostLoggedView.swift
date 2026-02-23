@@ -20,9 +20,9 @@ struct GhostLoggedView: View {
             VStack(spacing: 16) {
                 Spacer()
                 
-                // Logo
-                Circle()
-                    .fill(Color.phantomPurple)
+                Image("Logo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
                     .frame(width: 64, height: 64)
                 
                 // Success Message

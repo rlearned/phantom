@@ -35,14 +35,12 @@ struct DashboardView: View {
                             
                             Spacer()
                             
-                            // TODO: Replace this purple circle with the actual Phantom logo asset.
-                            // The button navigates back to the Home tab via the navigateToHome callback
-                            // injected by MainTabView.
                             Button(action: {
                                 navigateToHome?()
                             }) {
-                                Circle()
-                                    .fill(Color.phantomPurple)
+                                Image("Logo")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
                                     .frame(width: 40, height: 40)
                             }
                         }

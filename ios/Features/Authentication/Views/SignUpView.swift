@@ -17,9 +17,9 @@ struct SignUpView: View {
                 Color.phantomWhite.ignoresSafeArea()
                 
                 VStack(spacing: 32) {
-                    // Logo placeholder
-                    Circle()
-                        .fill(Color.phantomPurple)
+                    Image("Logo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                         .frame(width: 64, height: 64)
                     
                     Text("Create Account")

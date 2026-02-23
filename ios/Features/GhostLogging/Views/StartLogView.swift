@@ -18,9 +18,9 @@ struct StartLogView: View {
                 VStack(spacing: 16) {
                     Spacer()
                     
-                    // TODO: Replace this purple circle with Phantom logo
-                    Circle()
-                        .fill(Color.phantomPurple)
+                    Image("Logo")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                         .frame(width: 64, height: 64)
                     
                     VStack(spacing: 8) {
