@@ -203,6 +203,13 @@ export class ServiceStack extends cdk.Stack {
     });
 
     this.httpApi.addRoutes({
+      path: '/v1/market/validate',
+      methods: [apigatewayv2.HttpMethod.GET],
+      integration: integration,
+      authorizer: authorizer,
+    });
+
+    this.httpApi.addRoutes({
       path: '/v1/market/quote',
       methods: [apigatewayv2.HttpMethod.GET],
       integration: integration,

@@ -25,7 +25,7 @@ import java.util.Map;
 public class MarketDataService {
 
     private static final String ALPACA_DATA_BASE_URL = "https://data.alpaca.markets";
-    private static final String ALPACA_TRADING_BASE_URL = "https://api.alpaca.markets";
+    private static final String ALPACA_TRADING_BASE_URL = "https://paper-api.alpaca.markets";
     private static final String MOCK_SOURCE = "MOCK";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final ZoneId MARKET_TIMEZONE = ZoneId.of("America/New_York");
