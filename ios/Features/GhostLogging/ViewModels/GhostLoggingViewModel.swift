@@ -13,7 +13,7 @@ import Combine
 class GhostLoggingViewModel: ObservableObject {
     @Published var ticker = ""
     @Published var direction = "BUY"
-    @Published var priceSource = "MARKET"        // "MANUAL" or "MARKET"
+    @Published var priceSource = "MARKET_CURRENT" // "MANUAL" or "MARKET_CURRENT"
     @Published var quantityType = "SHARES"       // "SHARES" or "DOLLARS"
     @Published var intendedPriceText = ""        // manual price entry (scenarios A/B)
     @Published var quantityText = ""             // shares or dollar amount

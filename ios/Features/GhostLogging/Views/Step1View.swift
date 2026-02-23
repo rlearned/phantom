@@ -103,9 +103,9 @@ struct Step1View: View {
                         HStack(spacing: 16) {
                             PhantomSmallButton(
                                 title: "Current Price",
-                                isSelected: viewModel.priceSource == "MARKET",
+                                isSelected: viewModel.priceSource == "MARKET_CURRENT",
                                 action: {
-                                    viewModel.priceSource = "MARKET"
+                                    viewModel.priceSource = "MARKET_CURRENT"
                                     viewModel.intendedPriceText = ""
                                 }
                             )
