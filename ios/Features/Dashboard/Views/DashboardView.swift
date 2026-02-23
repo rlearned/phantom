@@ -152,7 +152,7 @@ struct DashboardView: View {
                                 .clipShape(Circle())
                                 .shadow(radius: 4)
                         }
-                        .padding(32)
+                        .padding(64)
                     }
                 }
             }

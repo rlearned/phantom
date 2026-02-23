@@ -56,8 +56,11 @@ struct BottomTabBar: View {
             }
 
             // Plus → Dashboard (Ghost Logging)
+            // "plus.fill" does not exist in SF Symbols, so we pass selectedIcon: "plus"
+            // so the icon stays visible (just turns black) when this tab is active.
             TabBarItem(
                 icon: "plus",
+                selectedIcon: "plus",
                 isSelected: selectedTab == .dashboard
             ) {
                 selectedTab = .dashboard
@@ -92,12 +95,16 @@ struct BottomTabBar: View {
 
 struct TabBarItem: View {
     let icon: String
+    /// The icon to show when this tab is selected.
+    /// Defaults to "\(icon).fill". Pass an explicit value for icons
+    /// that have no fill variant (e.g. "plus").
+    var selectedIcon: String? = nil
     let isSelected: Bool
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: isSelected ? "\(icon).fill" : icon)
+            Image(systemName: isSelected ? (selectedIcon ?? "\(icon).fill") : icon)
                 .font(.system(size: 24))
                 .foregroundColor(isSelected ? .phantomBlack : Color.black.opacity(0.35))
                 .frame(maxWidth: .infinity)
