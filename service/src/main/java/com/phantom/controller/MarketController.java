@@ -20,6 +20,23 @@ public class MarketController {
         this.marketDataService = marketDataService;
     }
     
+    public APIGatewayV2HTTPResponse validateTicker(APIGatewayV2HTTPEvent event) {
+        try {
+            Map<String, String> queryParams = event.getQueryStringParameters();
+            if (queryParams == null || !queryParams.containsKey("symbol")) {
+                return ResponseBuilder.badRequest("Missing required parameter: symbol");
+            }
+
+            String symbol = queryParams.get("symbol");
+            Map<String, Object> result = marketDataService.validateTicker(symbol);
+
+            return ResponseBuilder.ok(result);
+        } catch (Exception e) {
+            log.error("Error validating ticker", e);
+            return ResponseBuilder.internalServerError("Failed to validate ticker");
+        }
+    }
+
     public APIGatewayV2HTTPResponse getMarketQuote(APIGatewayV2HTTPEvent event) {
         try {
             Map<String, String> queryParams = event.getQueryStringParameters();

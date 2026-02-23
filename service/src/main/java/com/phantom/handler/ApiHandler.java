@@ -86,6 +86,10 @@ public class ApiHandler implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
                 return streakController.getStreaks(event, userId);
             }
             
+            if (path.equals("/v1/market/validate") && method.equals("GET")) {
+                return marketController.validateTicker(event);
+            }
+
             if (path.equals("/v1/market/quote") && method.equals("GET")) {
                 return marketController.getMarketQuote(event);
             }

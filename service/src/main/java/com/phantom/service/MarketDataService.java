@@ -25,6 +25,7 @@ import java.util.Map;
 public class MarketDataService {
 
     private static final String ALPACA_DATA_BASE_URL = "https://data.alpaca.markets";
+    private static final String ALPACA_TRADING_BASE_URL = "https://api.alpaca.markets";
     private static final String MOCK_SOURCE = "MOCK";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final ZoneId MARKET_TIMEZONE = ZoneId.of("America/New_York");
@@ -41,6 +42,50 @@ public class MarketDataService {
     MarketDataService(CacheRepository cacheRepository, HttpClient httpClient) {
         this.cacheRepository = cacheRepository;
         this.httpClient = httpClient;
+    }
+
+    public Map<String, Object> validateTicker(String symbol) throws IOException, InterruptedException {
+        log.info("Validating ticker symbol: {}", symbol);
+
+        String normalizedSymbol = symbol.trim().toUpperCase();
+
+        if (!isAlpacaConfigured()) {
+            log.warn("Alpaca API keys not configured, returning mock validation");
+            Map<String, Object> mock = new HashMap<>();
+            mock.put("valid", true);
+            mock.put(Constants.QUOTE_KEY_SYMBOL, normalizedSymbol);
+            mock.put("name", "Mock Asset");
+            mock.put("exchange", "MOCK");
+            mock.put("tradable", true);
+            return mock;
+        }
+
+        String url = String.format("%s/v2/assets/%s", ALPACA_TRADING_BASE_URL, normalizedSymbol);
+
+        HttpRequest request = buildAlpacaRequest(url);
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 404) {
+            Map<String, Object> result = new HashMap<>();
+            result.put("valid", false);
+            result.put(Constants.QUOTE_KEY_SYMBOL, normalizedSymbol);
+            return result;
+        }
+
+        if (response.statusCode() != 200) {
+            log.error("Failed to validate ticker {}: HTTP {} - {}", normalizedSymbol, response.statusCode(), response.body());
+            throw new RuntimeException("Failed to validate ticker: HTTP " + response.statusCode());
+        }
+
+        JsonNode jsonResponse = objectMapper.readTree(response.body());
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("valid", true);
+        result.put(Constants.QUOTE_KEY_SYMBOL, jsonResponse.has("symbol") ? jsonResponse.get("symbol").asText() : normalizedSymbol);
+        result.put("name", jsonResponse.has("name") ? jsonResponse.get("name").asText() : "");
+        result.put("exchange", jsonResponse.has("exchange") ? jsonResponse.get("exchange").asText() : "");
+        result.put("tradable", jsonResponse.has("tradable") && jsonResponse.get("tradable").asBoolean());
+        return result;
     }
 
     public Map<String, Object> getRealTimeQuote(String symbol) throws IOException, InterruptedException {
