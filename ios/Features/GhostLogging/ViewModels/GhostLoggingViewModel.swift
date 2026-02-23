@@ -101,8 +101,6 @@ class GhostLoggingViewModel: ObservableObject {
                 voiceKey: nil
             )
             
-            print(request)
-            
             let ghost = try await apiClient.createGhost(request)
             createdGhost = ghost
             

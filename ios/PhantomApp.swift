@@ -15,7 +15,7 @@ struct PhantomApp: App {
         WindowGroup {
             switch authManager.authState {
             case .signedIn:
-                DashboardView()
+                MainTabView()
             case .confirmingSignUp:
                 ConfirmSignUpView()
             case .onboarding:

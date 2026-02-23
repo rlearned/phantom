@@ -19,6 +19,11 @@
 		0B000013AAAA00010045F545 /* OnboardingStep3View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B000014AAAA00010045F545 /* OnboardingStep3View.swift */; };
 		0B000015AAAA00010045F545 /* OnboardingStep4View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B000016AAAA00010045F545 /* OnboardingStep4View.swift */; };
 		0B000017AAAA00010045F545 /* OnboardingContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B000018AAAA00010045F545 /* OnboardingContainerView.swift */; };
+		AA000002BBBB00010045F545 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001BBBB00010045F545 /* MainTabView.swift */; };
+		AA000009BBBB00010045F545 /* HesitationTaxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000008BBBB00010045F545 /* HesitationTaxView.swift */; };
+		AA00000DBBBB00010045F545 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000CBBBB00010045F545 /* ProfileView.swift */; };
+		AA000011BBBB00010045F545 /* StreakView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000010BBBB00010045F545 /* StreakView.swift */; };
+		AA000005BBBB00010045F545 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000004BBBB00010045F545 /* HomeView.swift */; };
 		C0901A022F4C80000045F545 /* CognitoConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A012F4C80000045F545 /* CognitoConfig.swift */; };
 		C0901A042F4C80000045F545 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A032F4C80000045F545 /* KeychainHelper.swift */; };
 		C0901A062F4C80000045F545 /* ConfirmSignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A052F4C80000045F545 /* ConfirmSignUpView.swift */; };
@@ -60,6 +65,11 @@
 		0B000014AAAA00010045F545 /* OnboardingStep3View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStep3View.swift; sourceTree = "<group>"; };
 		0B000016AAAA00010045F545 /* OnboardingStep4View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStep4View.swift; sourceTree = "<group>"; };
 		0B000018AAAA00010045F545 /* OnboardingContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContainerView.swift; sourceTree = "<group>"; };
+		AA000001BBBB00010045F545 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		AA000008BBBB00010045F545 /* HesitationTaxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HesitationTaxView.swift; sourceTree = "<group>"; };
+		AA00000CBBBB00010045F545 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		AA000010BBBB00010045F545 /* StreakView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakView.swift; sourceTree = "<group>"; };
+		AA000004BBBB00010045F545 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		C0901A012F4C80000045F545 /* CognitoConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoConfig.swift; sourceTree = "<group>"; };
 		C0901A032F4C80000045F545 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		C0901A052F4C80000045F545 /* ConfirmSignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmSignUpView.swift; sourceTree = "<group>"; };
@@ -152,6 +162,77 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		AA000003BBBB00010045F545 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				AA000001BBBB00010045F545 /* MainTabView.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		AA000006BBBB00010045F545 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				AA000007BBBB00010045F545 /* Views */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		AA000007BBBB00010045F545 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AA00000ABBBB00010045F545 /* HesitationTax */ = {
+			isa = PBXGroup;
+			children = (
+				AA00000BBBBB00010045F545 /* Views */,
+			);
+			path = HesitationTax;
+			sourceTree = "<group>";
+		};
+		AA00000BBBBB00010045F545 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AA000008BBBB00010045F545 /* HesitationTaxView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AA00000EBBBB00010045F545 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				AA00000FBBBB00010045F545 /* Views */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		AA00000FBBBB00010045F545 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AA00000CBBBB00010045F545 /* ProfileView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AA000012BBBB00010045F545 /* Streak */ = {
+			isa = PBXGroup;
+			children = (
+				AA000013BBBB00010045F545 /* Views */,
+			);
+			path = Streak;
+			sourceTree = "<group>";
+		};
+		AA000013BBBB00010045F545 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AA000010BBBB00010045F545 /* StreakView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		E5441A2B2F2D76DF0045F545 = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +289,7 @@
 				E5441A432F2D775D0045F545 /* Auth */,
 				E5441A472F2D775D0045F545 /* Models */,
 				E5441A492F2D775D0045F545 /* Network */,
+				AA000003BBBB00010045F545 /* Navigation */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -314,8 +396,28 @@
 				E5441A6D2F2D776A0045F545 /* Dashboard */,
 				E5441A772F2D776A0045F545 /* GhostLogging */,
 				0B200001AAAA00010045F545 /* Onboarding */,
+				AA000006BBBB00010045F545 /* Home */,
+				AA00000ABBBB00010045F545 /* HesitationTax */,
+				AA00000EBBBB00010045F545 /* Profile */,
+				AA000012BBBB00010045F545 /* Streak */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		AA000007BBBB00010045F545 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AA000004BBBB00010045F545 /* HomeView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AA000006BBBB00010045F545 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				AA000007BBBB00010045F545 /* Views */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -432,6 +534,11 @@
 				0B000013AAAA00010045F545 /* OnboardingStep3View.swift in Sources */,
 				0B000015AAAA00010045F545 /* OnboardingStep4View.swift in Sources */,
 				0B000017AAAA00010045F545 /* OnboardingContainerView.swift in Sources */,
+				AA000002BBBB00010045F545 /* MainTabView.swift in Sources */,
+				AA000005BBBB00010045F545 /* HomeView.swift in Sources */,
+				AA000009BBBB00010045F545 /* HesitationTaxView.swift in Sources */,
+				AA00000DBBBB00010045F545 /* ProfileView.swift in Sources */,
+				AA000011BBBB00010045F545 /* StreakView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
