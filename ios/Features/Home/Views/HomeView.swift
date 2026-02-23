@@ -10,6 +10,8 @@ import SwiftUI
 enum HomeTab {
     case home
     case hesitation
+    case placeholder
+    case placeholder2
 }
 
 struct HomeView: View {
@@ -26,6 +28,24 @@ struct HomeView: View {
                 HomeOverviewContent()
             case .hesitation:
                 HesitationTaxView()
+            case .placeholder:
+                // TODO: Replace with the real feature view when implemented
+                VStack {
+                    Spacer()
+                    Text("Placeholder")
+                        .font(.system(size: 20, weight: .regular))
+                        .foregroundColor(.phantomTextSecondary)
+                    Spacer()
+                }
+            case .placeholder2:
+                // TODO: Replace with the real feature view when implemented
+                VStack {
+                    Spacer()
+                    Text("Placeholder")
+                        .font(.system(size: 20, weight: .regular))
+                        .foregroundColor(.phantomTextSecondary)
+                    Spacer()
+                }
             }
         }
         .background(Color.phantomWhite)
@@ -38,50 +58,45 @@ struct TopActionBar: View {
     @Binding var selectedTab: HomeTab
 
     var body: some View {
-        HStack(spacing: 0) {
-            // "Home" tab
-            Button {
-                selectedTab = .home
-            } label: {
-                Text("Home")
-                    .font(.system(size: 22, weight: .regular))
-                    .foregroundColor(selectedTab == .home ? .phantomTextPrimary : Color.black.opacity(0.35))
-                    .padding(.bottom, 4)
-                    .overlay(alignment: .bottom) {
-                        if selectedTab == .home {
-                            Rectangle()
-                                .frame(height: 2)
-                                .foregroundColor(.phantomTextPrimary)
-                        }
-                    }
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 28) {
+                TopActionBarItem(title: "Home", tab: .home, selectedTab: $selectedTab)
+                TopActionBarItem(title: "Hesitation", tab: .hesitation, selectedTab: $selectedTab)
+                // TODO: Replace "Placeholder" with the real feature tab name when implemented
+                TopActionBarItem(title: "Placeholder", tab: .placeholder, selectedTab: $selectedTab)
+                // TODO: Replace "Placeholder" with the real feature tab name when implemented
+                TopActionBarItem(title: "Placeholder", tab: .placeholder2, selectedTab: $selectedTab)
             }
-            .buttonStyle(.plain)
-            .padding(.leading, 24)
-
-            Spacer()
-
-            // "Hesitation" tab
-            Button {
-                selectedTab = .hesitation
-            } label: {
-                Text("Hesitation")
-                    .font(.system(size: 22, weight: .regular))
-                    .foregroundColor(selectedTab == .hesitation ? .phantomTextPrimary : Color.black.opacity(0.35))
-                    .padding(.bottom, 4)
-                    .overlay(alignment: .bottom) {
-                        if selectedTab == .hesitation {
-                            Rectangle()
-                                .frame(height: 2)
-                                .foregroundColor(.phantomTextPrimary)
-                        }
-                    }
-            }
-            .buttonStyle(.plain)
-            .padding(.trailing, 24)
+            .padding(.horizontal, 24)
+            .padding(.top, 16)
+            .padding(.bottom, 12)
         }
-        .padding(.top, 16)
-        .padding(.bottom, 12)
         .background(Color.phantomWhite)
+    }
+}
+
+struct TopActionBarItem: View {
+    let title: String
+    let tab: HomeTab
+    @Binding var selectedTab: HomeTab
+
+    var body: some View {
+        Button {
+            selectedTab = tab
+        } label: {
+            Text(title)
+                .font(.system(size: 22, weight: .regular))
+                .foregroundColor(selectedTab == tab ? .phantomPurple : Color.black.opacity(0.35))
+                .padding(.bottom, 4)
+                .overlay(alignment: .bottom) {
+                    if selectedTab == tab {
+                        Rectangle()
+                            .frame(height: 2)
+                            .foregroundColor(.phantomPurple)
+                    }
+                }
+        }
+        .buttonStyle(.plain)
     }
 }
 

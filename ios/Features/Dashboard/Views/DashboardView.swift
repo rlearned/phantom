@@ -10,6 +10,8 @@ import SwiftUI
 struct DashboardView: View {
     @StateObject private var viewModel = DashboardViewModel()
     @State private var showingStartLog = false
+    /// Called when the user taps the top-right logo button to return to the home tab.
+    var navigateToHome: (() -> Void)? = nil
     
     var body: some View {
         NavigationStack {
@@ -33,14 +35,15 @@ struct DashboardView: View {
                             
                             Spacer()
                             
-                            // Profile Button
+                            // TODO: Replace this purple circle with the actual Phantom logo asset.
+                            // The button navigates back to the Home tab via the navigateToHome callback
+                            // injected by MainTabView.
                             Button(action: {
-                                AuthManager.shared.signOut()
+                                navigateToHome?()
                             }) {
-                                // TODO: Change this to Phantom logo
-                                Image(systemName: "person.circle")
-                                    .font(.system(size: 32))
-                                    .foregroundColor(.phantomPurple)
+                                Circle()
+                                    .fill(Color.phantomPurple)
+                                    .frame(width: 40, height: 40)
                             }
                         }
                         

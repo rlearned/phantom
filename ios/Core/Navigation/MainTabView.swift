@@ -25,7 +25,9 @@ struct MainTabView: View {
                 case .home:
                     HomeView()
                 case .dashboard:
-                    DashboardView()
+                    DashboardView(navigateToHome: {
+                        selectedTab = .home
+                    })
                 case .book:
                     // Tab is intentionally non-functional — stays on current screen
                     Color.clear
@@ -106,7 +108,7 @@ struct TabBarItem: View {
         Button(action: action) {
             Image(systemName: isSelected ? (selectedIcon ?? "\(icon).fill") : icon)
                 .font(.system(size: 24))
-                .foregroundColor(isSelected ? .phantomBlack : Color.black.opacity(0.35))
+                .foregroundColor(isSelected ? .phantomPurple : Color.black.opacity(0.35))
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 4)
         }
