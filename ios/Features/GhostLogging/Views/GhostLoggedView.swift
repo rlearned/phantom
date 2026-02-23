@@ -12,6 +12,9 @@ struct GhostLoggedView: View {
     @State private var showingNotes = false
     @State private var showingEmotion = false
     @Environment(\.dismiss) var dismiss
+    /// Called when the user taps "Done" to exit the entire logging flow back to the Dashboard.
+    /// Injected by StartLogView (via Step1View → Step2View) to dismiss the whole sheet.
+    var onDone: (() -> Void)? = nil
     
     var body: some View {
         ZStack {
@@ -89,14 +92,16 @@ struct GhostLoggedView: View {
                 
                 Spacer()
                 
-                // Done Button
+                // Done Button — dismisses the entire sheet back to Dashboard
                 PhantomButton(
                     title: "Done",
                     style: .primary,
                     action: {
-                        // Navigate back to dashboard
-                        // For now, dismiss the entire navigation stack
-                        dismiss()
+                        if let onDone = onDone {
+                            onDone()
+                        } else {
+                            dismiss()
+                        }
                     },
                     fullWidth: true
                 )

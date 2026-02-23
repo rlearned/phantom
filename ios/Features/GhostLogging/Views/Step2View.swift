@@ -12,7 +12,10 @@ struct Step2View: View {
     @State private var searchText = ""
     @State private var navigateToSuccess = false
     @Environment(\.dismiss) var dismiss
-    
+    /// Called when the entire ghost-logging flow is complete (tapping "Done" on GhostLoggedView).
+    /// Injected by Step1View → StartLogView to dismiss the whole sheet.
+    var onDone: (() -> Void)? = nil
+
     let availableTags = [
         "Fear of loss",
         "Not enough confidence",
@@ -22,89 +25,79 @@ struct Step2View: View {
         "Timing seems off",
         "Market volatility"
     ]
-    
+
     var filteredTags: [String] {
         if searchText.isEmpty {
             return availableTags
         }
         return availableTags.filter { $0.localizedCaseInsensitiveContains(searchText) }
     }
-    
+
     var body: some View {
         ZStack {
             Color.phantomWhite.ignoresSafeArea()
-            
+
             VStack(spacing: 60) {
                 // Content
                 VStack(spacing: 16) {
                     // Progress
                     ProgressIndicator(currentStep: 2, totalSteps: 2)
-                    
+
                     // Title
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Why did you hesitate?")
                             .phantomHeadlineStyle()
-                        
-                        Text("Add up to 3 tags")
+
+                        Text("Select all that apply")
                             .font(.phantomBodyMedium)
                             .foregroundColor(.phantomTextSecondary)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    // Selected Tags Display
+
+                    // Selected Tags (chips) — always visible when tags are selected
                     if !viewModel.selectedTags.isEmpty {
-                        HStack(spacing: 8) {
-                            Image(systemName: "magnifyingglass")
-                                .font(.system(size: 16))
-                                .foregroundColor(.phantomTextSecondary)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 8) {
-                                    ForEach(viewModel.selectedTags, id: \.self) { tag in
-                                        HStack(spacing: 8) {
-                                            Text(tag)
-                                                .font(.phantomBodySmall)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(viewModel.selectedTags, id: \.self) { tag in
+                                    HStack(spacing: 6) {
+                                        Text(tag)
+                                            .font(.phantomBodySmall)
+                                            .foregroundColor(.phantomWhite)
+
+                                        Button(action: {
+                                            viewModel.selectedTags.removeAll { $0 == tag }
+                                        }) {
+                                            Image(systemName: "xmark")
+                                                .font(.system(size: 10))
                                                 .foregroundColor(.phantomWhite)
-                                            
-                                            Button(action: {
-                                                viewModel.selectedTags.removeAll { $0 == tag }
-                                            }) {
-                                                Image(systemName: "xmark")
-                                                    .font(.system(size: 10))
-                                                    .foregroundColor(.phantomWhite)
-                                            }
                                         }
-                                        .padding(.horizontal, 12)
-                                        .padding(.vertical, 4)
-                                        .background(Color.phantomPurple)
-                                        .cornerRadius(12)
                                     }
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(Color.phantomPurple)
+                                    .cornerRadius(12)
                                 }
                             }
                         }
-                        .padding(12)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 24)
-                                .stroke(Color.phantomTextPrimary, lineWidth: 1)
-                        )
-                    } else {
-                        // Search Field
-                        HStack(spacing: 8) {
-                            Image(systemName: "magnifyingglass")
-                                .font(.system(size: 16))
-                                .foregroundColor(.phantomTextSecondary)
-                            
-                            TextField("Search or type reason...", text: $searchText)
-                                .font(.phantomBodySmall)
-                                .foregroundColor(.phantomTextSecondary)
-                        }
-                        .padding(12)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 24)
-                                .stroke(Color.phantomTextPrimary, lineWidth: 1)
-                        )
+                        .padding(.vertical, 4)
                     }
-                    
+
+                    // Search Field — always visible so users can keep filtering/adding
+                    HStack(spacing: 8) {
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 16))
+                            .foregroundColor(.phantomTextSecondary)
+
+                        TextField("Search or type reason...", text: $searchText)
+                            .font(.phantomBodySmall)
+                            .foregroundColor(.phantomTextSecondary)
+                    }
+                    .padding(12)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(Color.phantomTextPrimary, lineWidth: 1)
+                    )
+
                     // Available Tags
                     VStack(spacing: 8) {
                         ForEach(filteredTags, id: \.self) { tag in
@@ -112,13 +105,14 @@ struct Step2View: View {
                                 Text(tag)
                                     .font(.phantomBodyMedium)
                                     .foregroundColor(.phantomTextSecondary)
-                                
+
                                 Spacer()
-                                
+
                                 Button(action: {
                                     if viewModel.selectedTags.contains(tag) {
                                         viewModel.selectedTags.removeAll { $0 == tag }
-                                    } else if viewModel.selectedTags.count < 3 {
+                                    } else {
+                                        // No limit — add as many tags as needed
                                         viewModel.selectedTags.append(tag)
                                     }
                                 }) {
@@ -135,9 +129,9 @@ struct Step2View: View {
                         }
                     }
                 }
-                
+
                 Spacer()
-                
+
                 // Log Ghost Button
                 PhantomButton(
                     title: viewModel.isLoading ? "Logging Ghost..." : "Log Ghost",
@@ -153,7 +147,7 @@ struct Step2View: View {
                     isEnabled: !viewModel.isLoading && viewModel.isStep2Valid,
                     fullWidth: true
                 )
-                
+
                 if let errorMessage = viewModel.errorMessage {
                     Text(errorMessage)
                         .font(.phantomBodySmall)
@@ -175,7 +169,7 @@ struct Step2View: View {
             }
         }
         .navigationDestination(isPresented: $navigateToSuccess) {
-            GhostLoggedView(viewModel: viewModel)
+            GhostLoggedView(viewModel: viewModel, onDone: onDone)
         }
     }
 }

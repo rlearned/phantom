@@ -11,6 +11,9 @@ struct Step1View: View {
     @StateObject private var viewModel = GhostLoggingViewModel()
     @State private var navigateToStep2 = false
     @Environment(\.dismiss) var dismiss
+    /// Called when the entire ghost-logging flow is complete (tapping "Done" on GhostLoggedView).
+    /// Injected by StartLogView to dismiss the whole sheet.
+    var onDone: (() -> Void)? = nil
     
     var body: some View {
         ZStack {
@@ -209,7 +212,7 @@ struct Step1View: View {
             }
         }
         .navigationDestination(isPresented: $navigateToStep2) {
-            Step2View(viewModel: viewModel)
+            Step2View(viewModel: viewModel, onDone: onDone)
         }
     }
 }

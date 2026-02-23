@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// A mock ghost trade card showing an example AAPL trade for the onboarding flow
+// A mock ghost trade card showing an example AAPL trade for the onboarding flow
 struct ExampleGhostTradeCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {

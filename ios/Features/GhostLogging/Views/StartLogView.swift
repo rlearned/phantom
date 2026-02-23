@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct StartLogView: View {
+    @Environment(\.dismiss) var dismiss
     @State private var showingGhostFlow = false
     
     var body: some View {
@@ -50,7 +51,7 @@ struct StartLogView: View {
                 .padding(.vertical, 32)
             }
             .navigationDestination(isPresented: $showingGhostFlow) {
-                Step1View()
+                Step1View(onDone: { dismiss() })
             }
         }
     }

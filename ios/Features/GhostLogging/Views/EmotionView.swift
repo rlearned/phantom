@@ -132,9 +132,9 @@ struct EmotionView: View {
                     
                     Spacer()
                     
-                    // Back Button
+                    // Save Button
                     PhantomButton(
-                        title: "Back",
+                        title: "Save",
                         style: .primary,
                         action: {
                             dismiss()
