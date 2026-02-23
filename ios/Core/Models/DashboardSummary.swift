@@ -48,3 +48,11 @@ struct MarketQuoteResponse: Codable {
     let providerTs: String
     let fetchedAt: String
 }
+
+struct TickerValidationResponse: Codable {
+    let valid: Bool
+    let symbol: String
+    let name: String?
+    let exchange: String?
+    let tradable: Bool?
+}

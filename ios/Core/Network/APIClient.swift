@@ -182,6 +182,10 @@ class APIClient {
     
     // MARK: - Market Data Endpoints
     
+    func validateTicker(symbol: String) async throws -> TickerValidationResponse {
+        return try await self.request(endpoint: "/v1/market/validate?symbol=\(symbol)")
+    }
+
     func getMarketQuote(symbol: String) async throws -> MarketQuoteResponse {
         return try await self.request(endpoint: "/v1/market/quote?symbol=\(symbol)")
     }

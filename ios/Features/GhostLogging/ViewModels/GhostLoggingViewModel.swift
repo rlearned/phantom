@@ -48,22 +48,26 @@ class GhostLoggingViewModel: ObservableObject {
         !selectedTags.isEmpty
     }
     
-    //TODO: Replace this mock with actual API call, and include logic to validate the ticker
     func validateTicker() async {
         guard !ticker.trimmingCharacters(in: .whitespaces).isEmpty else {
             isTickerValid = false
             return
         }
-        
+
         isValidating = true
         errorMessage = nil
-        
-        // Mock: simulate API fetch delay (~1 second)
-        try? await Task.sleep(nanoseconds: 1_000_000_000)
-        
-        // TODO: Actually call apiClient.getMarketQuote(symbol: ticker) here
-        isTickerValid = true
-        
+
+        do {
+            let result = try await apiClient.validateTicker(symbol: ticker)
+            isTickerValid = result.valid
+            if !result.valid {
+                errorMessage = "Ticker \"\(ticker.uppercased())\" not found"
+            }
+        } catch {
+            isTickerValid = false
+            errorMessage = "Could not validate ticker"
+        }
+
         isValidating = false
     }
     

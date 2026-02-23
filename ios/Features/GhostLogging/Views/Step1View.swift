@@ -65,7 +65,13 @@ struct Step1View: View {
                         RoundedRectangle(cornerRadius: 24)
                             .stroke(Color.phantomTextPrimary, lineWidth: 1)
                     )
-                    
+
+                    if let error = viewModel.errorMessage {
+                        Text(error)
+                            .font(.phantomCaption)
+                            .foregroundColor(.red)
+                    }
+
                     if viewModel.isTickerValid {
                     // Direction Selection
                     HStack(spacing: 16) {
