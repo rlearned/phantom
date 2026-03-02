@@ -227,7 +227,7 @@ struct HomeStatCard: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(16)
-        .frame(maxWidth: .infinity, minHeight: 115, alignment: .topLeading)
+        .frame(maxWidth: .infinity, minHeight: 130, maxHeight: 130, alignment: .topLeading)
         .background(Color.white)
         .cornerRadius(16)
         .overlay(
