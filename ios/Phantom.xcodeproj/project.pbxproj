@@ -29,6 +29,8 @@
 		C0901A042F4C80000045F545 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A032F4C80000045F545 /* KeychainHelper.swift */; };
 		C0901A062F4C80000045F545 /* ConfirmSignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A052F4C80000045F545 /* ConfirmSignUpView.swift */; };
 		E5441A4B2F2D775D0045F545 /* Ghost.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A452F2D775D0045F545 /* Ghost.swift */; };
+		AA000018BBBB00010045F545 /* GhostedAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000017BBBB00010045F545 /* GhostedAsset.swift */; };
+		AA000016BBBB00010045F545 /* GhostedAssetsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000015BBBB00010045F545 /* GhostedAssetsViewModel.swift */; };
 		E5441A4C2F2D775D0045F545 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A422F2D775D0045F545 /* AuthManager.swift */; };
 		E5441A4D2F2D775D0045F545 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A482F2D775D0045F545 /* APIClient.swift */; };
 		E5441A4E2F2D775D0045F545 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5441A462F2D775D0045F545 /* UserProfile.swift */; };
@@ -78,6 +80,8 @@
 		E5441A422F2D775D0045F545 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		E5441A442F2D775D0045F545 /* DashboardSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSummary.swift; sourceTree = "<group>"; };
 		E5441A452F2D775D0045F545 /* Ghost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ghost.swift; sourceTree = "<group>"; };
+		AA000017BBBB00010045F545 /* GhostedAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostedAsset.swift; sourceTree = "<group>"; };
+		AA000015BBBB00010045F545 /* GhostedAssetsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GhostedAssetsViewModel.swift; sourceTree = "<group>"; };
 		E5441A462F2D775D0045F545 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		E5441A482F2D775D0045F545 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		E5441A592F2D77660045F545 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -171,21 +175,6 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
-		AA000006BBBB00010045F545 /* Home */ = {
-			isa = PBXGroup;
-			children = (
-				AA000007BBBB00010045F545 /* Views */,
-			);
-			path = Home;
-			sourceTree = "<group>";
-		};
-		AA000007BBBB00010045F545 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		AA00000ABBBB00010045F545 /* HesitationTax */ = {
 			isa = PBXGroup;
 			children = (
@@ -221,12 +210,12 @@
 		AA000012BBBB00010045F545 /* Streak */ = {
 			isa = PBXGroup;
 			children = (
-				AA000013BBBB00010045F545 /* Views */,
+				AA000019BBBB00010045F545 /* Views */,
 			);
 			path = Streak;
 			sourceTree = "<group>";
 		};
-		AA000013BBBB00010045F545 /* Views */ = {
+		AA000019BBBB00010045F545 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				AA000010BBBB00010045F545 /* StreakView.swift */,
@@ -271,6 +260,7 @@
 			children = (
 				E5441A442F2D775D0045F545 /* DashboardSummary.swift */,
 				E5441A452F2D775D0045F545 /* Ghost.swift */,
+				AA000017BBBB00010045F545 /* GhostedAsset.swift */,
 				E5441A462F2D775D0045F545 /* UserProfile.swift */,
 			);
 			path = Models;
@@ -405,20 +395,29 @@
 			path = Features;
 			sourceTree = "<group>";
 		};
+		AA000006BBBB00010045F545 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				AA00001ABBBB00010045F545 /* ViewModels */,
+				AA000007BBBB00010045F545 /* Views */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		AA00001ABBBB00010045F545 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				AA000015BBBB00010045F545 /* GhostedAssetsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		AA000007BBBB00010045F545 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				AA000004BBBB00010045F545 /* HomeView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		AA000006BBBB00010045F545 /* Home */ = {
-			isa = PBXGroup;
-			children = (
-				AA000007BBBB00010045F545 /* Views */,
-			);
-			path = Home;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -500,6 +499,8 @@
 			files = (
 				E5441A862F2D77700045F545 /* PhantomApp.swift in Sources */,
 				E5441A4B2F2D775D0045F545 /* Ghost.swift in Sources */,
+				AA000018BBBB00010045F545 /* GhostedAsset.swift in Sources */,
+				AA000016BBBB00010045F545 /* GhostedAssetsViewModel.swift in Sources */,
 				E5441A5E2F2D77660045F545 /* ProgressIndicator.swift in Sources */,
 				E5441A5F2F2D77660045F545 /* Typography.swift in Sources */,
 				E5441A602F2D77660045F545 /* Colors.swift in Sources */,
