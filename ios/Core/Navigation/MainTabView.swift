@@ -29,8 +29,7 @@ struct MainTabView: View {
                         selectedTab = .home
                     })
                 case .book:
-                    // Tab is intentionally non-functional — stays on current screen
-                    Color.clear
+                    InvestorDNAView()
                 case .profile:
                     ProfileView()
                 }
@@ -68,13 +67,12 @@ struct BottomTabBar: View {
                 selectedTab = .dashboard
             }
 
-            // Book → No-op (stays on current screen)
+            // Book → Investor DNA (static placeholder)
             TabBarItem(
                 icon: "book",
                 isSelected: selectedTab == .book
             ) {
-                // TODO: Book feature — currently intentionally non-functional
-                // Do not change selectedTab; tapping does nothing
+                selectedTab = .book
             }
 
             // Person → Profile
