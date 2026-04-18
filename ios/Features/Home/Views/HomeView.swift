@@ -328,24 +328,20 @@ struct FrequentlyGhostedAssetsView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.top, 60)
                 } else {
-                    VStack(spacing: 0) {
+                    // Each asset is its own card — matching the updated Figma design
+                    // (individual cards instead of a single grouped list with dividers)
+                    VStack(spacing: 12) {
                         ForEach(viewModel.assets) { asset in
                             GhostedAssetRow(asset: asset)
                                 .background(Color.white)
-
-                            if asset.id != viewModel.assets.last?.id {
-                                Divider()
-                                    .padding(.leading, 72)
-                            }
+                                .cornerRadius(16)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .stroke(Color(hex: "#E5E5E5"), lineWidth: 1)
+                                )
+                                .shadow(color: Color.black.opacity(0.05), radius: 16, x: 0, y: 8)
                         }
                     }
-                    .background(Color.white)
-                    .cornerRadius(16)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color(hex: "#E5E5E5"), lineWidth: 1)
-                    )
-                    .shadow(color: Color.black.opacity(0.05), radius: 16, x: 0, y: 8)
                 }
 
                 if let error = viewModel.errorMessage {
