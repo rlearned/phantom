@@ -26,6 +26,8 @@
 		AA000011BBBB00010045F545 /* StreakView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000010BBBB00010045F545 /* StreakView.swift */; };
 		AA000005BBBB00010045F545 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000004BBBB00010045F545 /* HomeView.swift */; };
 		DD000002DDF00010045F545 /* InvestorDNAView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD000001DDF00010045F545 /* InvestorDNAView.swift */; };
+		DD000006DDF00010045F545 /* InvestorDNAProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD000005DDF00010045F545 /* InvestorDNAProfile.swift */; };
+		DD000008DDF00010045F545 /* InvestorDNAViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD000007DDF00010045F545 /* InvestorDNAViewModel.swift */; };
 		C0901A022F4C80000045F545 /* CognitoConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A012F4C80000045F545 /* CognitoConfig.swift */; };
 		C0901A042F4C80000045F545 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A032F4C80000045F545 /* KeychainHelper.swift */; };
 		C0901A062F4C80000045F545 /* ConfirmSignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A052F4C80000045F545 /* ConfirmSignUpView.swift */; };
@@ -75,6 +77,8 @@
 		AA000010BBBB00010045F545 /* StreakView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakView.swift; sourceTree = "<group>"; };
 		AA000004BBBB00010045F545 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		DD000001DDF00010045F545 /* InvestorDNAView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestorDNAView.swift; sourceTree = "<group>"; };
+		DD000005DDF00010045F545 /* InvestorDNAProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestorDNAProfile.swift; sourceTree = "<group>"; };
+		DD000007DDF00010045F545 /* InvestorDNAViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestorDNAViewModel.swift; sourceTree = "<group>"; };
 		C0901A012F4C80000045F545 /* CognitoConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoConfig.swift; sourceTree = "<group>"; };
 		C0901A032F4C80000045F545 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		C0901A052F4C80000045F545 /* ConfirmSignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmSignUpView.swift; sourceTree = "<group>"; };
@@ -426,9 +430,27 @@
 		DD000003DDF00010045F545 /* InvestorDNA */ = {
 			isa = PBXGroup;
 			children = (
+				DD000009DDF00010045F545 /* Models */,
+				DD000010DDF00010045F545 /* ViewModels */,
 				DD000004DDF00010045F545 /* Views */,
 			);
 			path = InvestorDNA;
+			sourceTree = "<group>";
+		};
+		DD000009DDF00010045F545 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DD000005DDF00010045F545 /* InvestorDNAProfile.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DD000010DDF00010045F545 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				DD000007DDF00010045F545 /* InvestorDNAViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		DD000004DDF00010045F545 /* Views */ = {
@@ -562,6 +584,8 @@
 				AA00000DBBBB00010045F545 /* ProfileView.swift in Sources */,
 				AA000011BBBB00010045F545 /* StreakView.swift in Sources */,
 				DD000002DDF00010045F545 /* InvestorDNAView.swift in Sources */,
+				DD000006DDF00010045F545 /* InvestorDNAProfile.swift in Sources */,
+				DD000008DDF00010045F545 /* InvestorDNAViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
