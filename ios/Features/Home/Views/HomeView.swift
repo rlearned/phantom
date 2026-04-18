@@ -16,6 +16,7 @@ enum HomeTab {
 
 struct HomeView: View {
     @State private var selectedHomeTab: HomeTab = .home
+    @StateObject private var hesitationVM = HesitationTaxViewModel()
 
     var body: some View {
         VStack(spacing: 0) {
@@ -25,9 +26,9 @@ struct HomeView: View {
             // MARK: - Content Area
             switch selectedHomeTab {
             case .home:
-                HomeOverviewContent()
+                HomeOverviewContent(hesitationVM: hesitationVM)
             case .hesitation:
-                HesitationTaxView()
+                HesitationTaxView(viewModel: hesitationVM)
             case .ghosted:
                 FrequentlyGhostedAssetsView()
             case .placeholder2:
@@ -42,6 +43,10 @@ struct HomeView: View {
             }
         }
         .background(Color(hex: "#F8F8FA"))
+        .task {
+            // Load hesitation tax data once for both Home and Hesitation tabs
+            await hesitationVM.load()
+        }
     }
 }
 
@@ -95,6 +100,8 @@ struct TopActionBarItem: View {
 // MARK: - Home Overview Content (Home 1)
 
 struct HomeOverviewContent: View {
+    @ObservedObject var hesitationVM: HesitationTaxViewModel
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
@@ -115,43 +122,54 @@ struct HomeOverviewContent: View {
                     .padding(.top, 4)
 
                 // MARK: - 2x2 Stats Grid
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                ZStack(alignment: .center) {
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
 
-                    // Ghosted Trades
-                    // TODO: Replace placeholder "23" with real ghostCountTotal from
-                    // DashboardSummary fetched via DashboardViewModel.
-                    HomeStatCard(
-                        value: "23",
-                        label: "Ghosted Trades",
-                        icon: "person.crop.circle.badge.questionmark"
-                    )
+                        // Ghosted Trades — real count from hesitationVM
+                        HomeStatCard(
+                            value: "\(hesitationVM.ghostCount)",
+                            label: "Ghosted Trades",
+                            icon: "person.crop.circle.badge.questionmark"
+                        )
 
-                    // Total Hesitation Tax
-                    // TODO: Replace placeholder "$1,023.21" with real total hesitation tax
-                    // calculated from all ghost trades via the HesitationTax service.
-                    HomeStatCard(
-                        value: "$1,023.21",
-                        label: "Total Hesitation Tax",
-                        icon: "dollarsign.circle"
-                    )
+                        // Total Hesitation Tax — (currentPrice - loggedPrice) × netShares per ticker
+                        HomeStatCard(
+                            value: hesitationVM.formatCurrency(hesitationVM.totalHesitationTax),
+                            label: "Total Hesitation Tax",
+                            icon: "dollarsign.circle"
+                        )
 
-                    // Avg per Trade
-                    // TODO: Replace placeholder "$2,081.91" with computed average:
-                    // totalHesitationTax / ghostCountTotal, fetched from backend.
-                    HomeStatCard(
-                        value: "$2,081.91",
-                        label: "Avg per Trade",
-                        icon: "chart.line.uptrend.xyaxis"
-                    )
+                        // Avg per Trade — totalHesitationTax / ghostCount
+                        HomeStatCard(
+                            value: hesitationVM.formatCurrency(hesitationVM.avgPerTrade),
+                            label: "Avg per Trade",
+                            icon: "chart.line.uptrend.xyaxis"
+                        )
 
-                    // Hesitation Percentage
-                    // TODO: Replace placeholder "21%" with real hesitation percentage:
-                    // (hesitatedTrades / totalConsideredTrades) * 100, from backend analytics.
-                    HomeStatCard(
-                        value: "21%",
-                        label: "Hesitation Percentage",
-                        icon: "percent"
-                    )
+                        // Hesitation Percentage — hesitationTax / ifInvestedValue
+                        HomeStatCard(
+                            value: hesitationVM.formatPercentage(hesitationVM.hesitationPercentage),
+                            label: "Hesitation Percentage",
+                            icon: "percent"
+                        )
+                    }
+
+                    // Loading overlay while prices are being fetched
+                    if hesitationVM.isLoading {
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color.white.opacity(0.7))
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                    }
+                }
+
+                // Error message (non-fatal — the grid still shows last values)
+                if let error = hesitationVM.errorMessage {
+                    Text(error)
+                        .font(.system(size: 12))
+                        .foregroundColor(.red)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
                 }
 
                 // Bottom padding to clear the custom tab bar

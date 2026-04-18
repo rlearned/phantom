@@ -8,9 +8,26 @@
 import SwiftUI
 
 struct HesitationTaxView: View {
-    // TODO: Replace this placeholder ticker state with a real view model
-    // that fetches hesitation tax data from the backend for a given ticker.
+    @ObservedObject var viewModel: HesitationTaxViewModel
+
+    // TODO: Wire up ticker search to filter hesitation data per-symbol.
+    // When a valid ticker is entered:
+    //   1. Re-fetch ghost trades filtered by that ticker.
+    //   2. Re-calculate hesitation tax for just that ticker.
+    //   3. Refresh the cards and chart below.
     @State private var searchTicker: String = ""
+
+    // MARK: - Computed display values
+
+    /// Current value of the ghost portfolio: what you would own today.
+    private var ghostPortfolioCurrentValue: Double {
+        viewModel.ifInvestedValue + viewModel.totalHesitationTax
+    }
+
+    /// True when the market moved in the ghost-trade direction (tax > 0 = missed gain).
+    private var isMissedOpportunity: Bool {
+        viewModel.totalHesitationTax >= 0
+    }
 
     var body: some View {
         ScrollView {
@@ -30,12 +47,7 @@ struct HesitationTaxView: View {
                 .padding(.top, 8)
 
                 // MARK: - Ticker Search Bar
-                // TODO: Implement ticker search functionality.
-                // When a valid ticker is entered:
-                //   1. Call the backend API to fetch ghost trades for that ticker.
-                //   2. Calculate "If You Had Invested" value using historical price data.
-                //   3. Compare against the user's actual hesitation amount.
-                //   4. Display the hesitation tax (opportunity cost) below.
+                // TODO: Implement per-ticker filtering — see TODOs on searchTicker above.
                 HStack(spacing: 8) {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(Color.black.opacity(0.4))
@@ -53,68 +65,85 @@ struct HesitationTaxView: View {
                 )
 
                 // MARK: - If You Had Invested vs. Your Hesitation Cards
-                // TODO: Replace placeholder values with real computed data:
-                //   - "If You Had Invested": total portfolio value if ghost trades were executed.
-                //   - "Your Hesitation": actual amount invested (if any, otherwise $0).
-                //   - "Gain" and "Loss" values should reflect market performance delta.
-                HStack(spacing: 12) {
-                    // "If You Had Invested" card
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Image(systemName: "chart.line.uptrend.xyaxis")
-                                .font(.system(size: 14))
-                            Spacer()
-                        }
-                        Text("If You Had Invested")
-                            .font(.system(size: 15, weight: .regular))
-                            .foregroundColor(.phantomTextPrimary)
-
-                        Text("$14,956.20")
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundColor(.phantomTextPrimary)
-                            .padding(.top, 4)
-
-                        Text("Gain: $4,401.35 (44.2%)")
-                            .font(.system(size: 10, weight: .regular))
-                            .foregroundColor(.phantomTextPrimary)
+                if viewModel.isLoading {
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                            .padding(.vertical, 20)
+                        Spacer()
                     }
-                    .padding(12)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(hex: "C5FFC5"))
-                    .clipShape(RoundedRectangle(cornerRadius: 24))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 24)
-                            .stroke(Color.black, lineWidth: 1)
-                    )
+                } else {
+                    HStack(spacing: 12) {
 
-                    // "Your Hesitation" card
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Image(systemName: "chart.line.downtrend.xyaxis")
-                                .font(.system(size: 14))
-                            Spacer()
+                        // ── "If You Had Invested" card (green) ──────────────────
+                        // Shows the current worth of the ghost portfolio and the gain (or loss).
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Image(systemName: isMissedOpportunity
+                                      ? "chart.line.uptrend.xyaxis"
+                                      : "chart.line.downtrend.xyaxis")
+                                    .font(.system(size: 14))
+                                Spacer()
+                            }
+                            Text("If You Had Invested")
+                                .font(.system(size: 15, weight: .regular))
+                                .foregroundColor(.phantomTextPrimary)
+
+                            // Current value = original cost basis + price appreciation
+                            Text(viewModel.formatCurrency(max(0, ghostPortfolioCurrentValue)))
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundColor(.phantomTextPrimary)
+                                .padding(.top, 4)
+
+                            // Delta line — e.g. "Gain: $4,401.35 (+44.2%)"
+                            let deltaLabel = isMissedOpportunity ? "Gain" : "Loss Avoided"
+                            Text("\(deltaLabel): \(viewModel.formatCurrency(abs(viewModel.totalHesitationTax))) (\(viewModel.formatSignedPercentage(viewModel.hesitationPercentage)))")
+                                .font(.system(size: 10, weight: .regular))
+                                .foregroundColor(.phantomTextPrimary)
                         }
-                        Text("Your Hesitation")
-                            .font(.system(size: 15, weight: .regular))
-                            .foregroundColor(.phantomTextPrimary)
+                        .padding(12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color(hex: "C5FFC5"))
+                        .clipShape(RoundedRectangle(cornerRadius: 24))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 24)
+                                .stroke(Color.black, lineWidth: 1)
+                        )
 
-                        Text("$1,002.50")
-                            .font(.system(size: 14, weight: .regular))
-                            .foregroundColor(.phantomTextPrimary)
-                            .padding(.top, 4)
+                        // ── "Your Hesitation" card (red) ────────────────────────
+                        // Shows the opportunity cost — the price of not acting.
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Image(systemName: "chart.line.downtrend.xyaxis")
+                                    .font(.system(size: 14))
+                                Spacer()
+                            }
+                            Text("Your Hesitation")
+                                .font(.system(size: 15, weight: .regular))
+                                .foregroundColor(.phantomTextPrimary)
 
-                        Text("Loss: $4,401.35 (44.2%)")
-                            .font(.system(size: 10, weight: .regular))
-                            .foregroundColor(.phantomTextPrimary)
+                            // Opportunity cost = absolute value of hesitation tax
+                            Text(viewModel.formatCurrency(abs(viewModel.totalHesitationTax)))
+                                .font(.system(size: 14, weight: .regular))
+                                .foregroundColor(.phantomTextPrimary)
+                                .padding(.top, 4)
+
+                            // Loss label — e.g. "Loss: $4,401.35 (44.2%)"
+                            let lossLabel = isMissedOpportunity ? "Loss" : "Gain (Dodged loss)"
+                            Text("\(lossLabel): \(viewModel.formatCurrency(abs(viewModel.totalHesitationTax))) (\(viewModel.formatPercentage(abs(viewModel.hesitationPercentage))))")
+                                .font(.system(size: 10, weight: .regular))
+                                .foregroundColor(.phantomTextPrimary)
+                        }
+                        .padding(12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color(hex: "FFC8C8"))
+                        .clipShape(RoundedRectangle(cornerRadius: 24))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 24)
+                                .stroke(Color.black, lineWidth: 1)
+                        )
                     }
-                    .padding(12)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color(hex: "FFC8C8"))
-                    .clipShape(RoundedRectangle(cornerRadius: 24))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 24)
-                            .stroke(Color.black, lineWidth: 1)
-                    )
                 }
 
                 // MARK: - Performance Chart Placeholder
@@ -138,9 +167,7 @@ struct HesitationTaxView: View {
                 }
 
                 // MARK: - Your Hesitation Tax Section
-                // TODO: Calculate and display the real hesitation tax for the searched ticker.
-                // Formula: hesitationTax = (currentPrice - ghostEntryPrice) * shares
-                // If no ticker is searched, aggregate across all ghost trades.
+                // Displays a narrative summary using the real computed hesitation tax values.
                 VStack(alignment: .leading, spacing: 8) {
                     HStack(spacing: 8) {
                         Image(systemName: "dollarsign.circle")
@@ -149,10 +176,27 @@ struct HesitationTaxView: View {
                             .font(.system(size: 15, weight: .regular))
                     }
 
-                    Text("By not taking action on AAPL, you've paid a hesitation tax of $3,589.26 (35.9% potential return). This represents the opportunity cost of delaying or avoiding your investment decision.")
-                        .font(.system(size: 13, weight: .light))
-                        .foregroundColor(.phantomTextPrimary)
-                        .fixedSize(horizontal: false, vertical: true)
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                    } else if viewModel.ghostCount == 0 {
+                        Text("No ghost trades logged yet. Start logging to calculate your hesitation tax.")
+                            .font(.system(size: 13, weight: .light))
+                            .foregroundColor(.phantomTextPrimary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    } else {
+                        let taxFormatted = viewModel.formatCurrency(abs(viewModel.totalHesitationTax))
+                        let pctFormatted = viewModel.formatPercentage(abs(viewModel.hesitationPercentage))
+                        let direction = isMissedOpportunity ? "not taking action" : "hesitating"
+                        let outcome = isMissedOpportunity
+                            ? "paid a hesitation tax of \(taxFormatted) (\(pctFormatted) potential return). This represents the opportunity cost of delaying or avoiding your investment decisions."
+                            : "actually avoided a loss of \(taxFormatted) (\(pctFormatted)). The market moved against your ghost trades — your hesitation worked in your favor this time."
+
+                        Text("Across \(viewModel.ghostCount) ghost trade\(viewModel.ghostCount == 1 ? "" : "s"), by \(direction) you've \(outcome)")
+                            .font(.system(size: 13, weight: .light))
+                            .foregroundColor(.phantomTextPrimary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
 
                 // MARK: - Your Common Hesitation Triggers
@@ -209,7 +253,17 @@ struct HesitationTaxView: View {
                         .foregroundColor(.phantomTextSecondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-                .padding(.bottom, 100) // Bottom padding for tab bar
+
+                // Error banner (non-fatal)
+                if let error = viewModel.errorMessage {
+                    Text("⚠ \(error)")
+                        .font(.system(size: 12, weight: .light))
+                        .foregroundColor(.red)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+                }
+
+                Spacer().frame(height: 100) // Bottom padding for tab bar
             }
             .padding(.horizontal, 24)
             .padding(.top, 12)
@@ -219,5 +273,5 @@ struct HesitationTaxView: View {
 }
 
 #Preview {
-    HesitationTaxView()
+    HesitationTaxView(viewModel: HesitationTaxViewModel())
 }
