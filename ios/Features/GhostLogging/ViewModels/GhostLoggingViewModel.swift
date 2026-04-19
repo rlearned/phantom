@@ -19,6 +19,8 @@ class GhostLoggingViewModel: ObservableObject {
     @Published var quantityText = ""             // shares or dollar amount
     @Published var selectedTags: [String] = []
     @Published var noteText = ""
+    @Published var emotionStress: Double? = nil       // 0.0 = calm, 1.0 = high stress
+    @Published var emotionSentiment: Double? = nil    // 0.0 = fear, 1.0 = greed
     @Published var isTickerValid = false
     @Published var isValidating = false
     @Published var isLoading = false
@@ -102,12 +104,16 @@ class GhostLoggingViewModel: ObservableObject {
                 intendedDollars: quantityType == "DOLLARS" ? quantityValue : nil,
                 hesitationTags: selectedTags.isEmpty ? nil : selectedTags,
                 noteText: noteText.isEmpty ? nil : noteText,
-                voiceKey: nil
+                voiceKey: nil,
+                emotionStress: emotionStress,
+                emotionSentiment: emotionSentiment
             )
             
             let ghost = try await apiClient.createGhost(request)
             createdGhost = ghost
-            
+
+            InvestorDNAViewModel.markDirty()
+
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -119,17 +125,53 @@ class GhostLoggingViewModel: ObservableObject {
         guard let ghostId = createdGhost?.ghostId, !noteText.isEmpty else {
             return
         }
-        
+
         isLoading = true
-        
+
         do {
-            let request = UpdateGhostRequest(status: nil, noteText: noteText)
+            let request = UpdateGhostRequest(status: nil, noteText: noteText, emotionStress: nil, emotionSentiment: nil)
             let updatedGhost = try await apiClient.updateGhost(ghostId: ghostId, request: request)
             createdGhost = updatedGhost
         } catch {
             errorMessage = error.localizedDescription
         }
-        
+
+        isLoading = false
+    }
+
+    /// Persists the emotion compass values to the backend. Called from EmotionView's Save button.
+    /// - Parameters:
+    ///   - stress: 0.0 = calm, 1.0 = high stress
+    ///   - sentiment: 0.0 = fear, 1.0 = greed
+    func saveEmotion(stress: Double, sentiment: Double) async {
+        let clampedStress = min(max(stress, 0.0), 1.0)
+        let clampedSentiment = min(max(sentiment, 0.0), 1.0)
+
+        // Update local state regardless of network result so the UI reflects the user's choice.
+        emotionStress = clampedStress
+        emotionSentiment = clampedSentiment
+
+        guard let ghostId = createdGhost?.ghostId else {
+            // Create-time path (no ghost yet): the values will be sent with the next createGhost call.
+            return
+        }
+
+        isLoading = true
+
+        do {
+            let request = UpdateGhostRequest(
+                status: nil,
+                noteText: nil,
+                emotionStress: clampedStress,
+                emotionSentiment: clampedSentiment
+            )
+            let updatedGhost = try await apiClient.updateGhost(ghostId: ghostId, request: request)
+            createdGhost = updatedGhost
+            InvestorDNAViewModel.markDirty()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+
         isLoading = false
     }
 }

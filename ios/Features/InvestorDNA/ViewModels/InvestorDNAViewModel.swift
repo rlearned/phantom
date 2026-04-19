@@ -24,44 +24,58 @@ enum DNAViewState {
 @MainActor
 class InvestorDNAViewModel: ObservableObject {
 
+    // MARK: - Process-wide Cache
+    private static var cachedResponse: InvestorDNAResponse?
+    private static var cachedGhosts: [Ghost]?
+    private static var isDirty: Bool = true
+
+    static func markDirty() {
+        isDirty = true
+    }
+
     // MARK: - DNA Metric Scores (0–5)
-    // TODO: Replace manual values below with API response once GET /v1/investor-dna is ready.
-    // These are kept as separate @Published vars so you can manually test any combination
-    // before the backend endpoint exists.
-    @Published var intensityScore: Int    = 4
-    @Published var momentumScore: Int     = 3
-    @Published var convictionScore: Int   = 2
-    @Published var cautionScore: Int      = 5
-    @Published var deliberationScore: Int = 4
-    @Published var sensitivityScore: Int  = 3
+    @Published var intensityScore: Int    = 0
+    @Published var momentumScore: Int     = 0
+    @Published var convictionScore: Int   = 0
+    @Published var cautionScore: Int      = 0
+    @Published var deliberationScore: Int = 0
+    @Published var sensitivityScore: Int  = 0
+
+    // MARK: - Backend Insights
+    @Published var personalizedInsights: [String: String] = [:]
 
     // MARK: - Ghost Data
     @Published var ghosts: [Ghost] = []
+    @Published var ghostsAnalyzed: Int = 0
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
+
+    // MARK: - Loading Progress
+    @Published var loadingProgress: Double = 0.0
+    @Published var loadingPhase: Int = 0
 
     // MARK: - API Client
     private let apiClient = APIClient.shared
 
     // MARK: - Computed: View State
     var viewState: DNAViewState {
-        switch ghosts.count {
+        switch ghostCount {
         case 0:        return .empty
         case 1..<7:    return .inProgress
         default:       return .filled
         }
     }
 
-    var ghostCount: Int { ghosts.count }
+    var ghostCount: Int {
+        ghostsAnalyzed > 0 ? ghostsAnalyzed : ghosts.count
+    }
 
-    /// Number of ghosts still needed to unlock the full profile (threshold = 7).
     var ghostsUntilUnlock: Int {
         max(0, 7 - ghosts.count)
     }
 
     // MARK: - Computed: Traits
 
-    /// All 6 traits with scores and metadata, in display order.
     var allTraits: [TraitInfo] {
         TraitInfo.allTraits(
             intensity:    intensityScore,
@@ -73,10 +87,8 @@ class InvestorDNAViewModel: ObservableObject {
         )
     }
 
-    // Convenience alias for typo-proof internal access
     private var sensitityScore: Int { sensitivityScore }
 
-    /// Top 3 traits sorted by score (descending), used for "Your Dominant Tendencies".
     var dominantTraits: [TraitInfo] {
         allTraits
             .sorted { $0.score > $1.score }
@@ -84,7 +96,6 @@ class InvestorDNAViewModel: ObservableObject {
             .map { $0 }
     }
 
-    /// The first / highest-scoring trait, used for the Early Signal banner.
     var earlySignalTrait: TraitInfo? {
         allTraits.max(by: { $0.score < $1.score })
     }
@@ -101,8 +112,8 @@ class InvestorDNAViewModel: ObservableObject {
         )
     }
 
-    // MARK: - Radar Chart Values (Double 0.0–1.0 for drawing)
-    /// Returns values in the order: Intensity, Momentum, Conviction, Caution, Deliberation, Sensitivity
+    // MARK: - Radar Chart Values
+
     var radarValues: [Double] {
         [
             Double(intensityScore)    / 5.0,
@@ -114,13 +125,10 @@ class InvestorDNAViewModel: ObservableObject {
         ]
     }
 
-    /// Radar axis labels in display order (matches radarValues index).
     let radarAxes = ["Intensity", "Momentum", "Conviction", "Caution", "Deliberation", "Sensitivity"]
 
-    // MARK: - Recent Ghosts for a Trait
-    /// Returns up to 3 recent ghosts that are associated with a given trait.
-    /// Currently returns the 3 most recent ghosts as a general proxy.
-    /// TODO: Filter by hesitation tags related to the trait once tag taxonomy is finalized.
+    // MARK: - Recent Ghosts
+
     func recentGhosts(for trait: TraitInfo) -> [Ghost] {
         Array(
             ghosts
@@ -129,38 +137,90 @@ class InvestorDNAViewModel: ObservableObject {
         )
     }
 
+    func meaning(for trait: TraitInfo) -> String {
+        personalizedInsights[trait.id] ?? trait.meaning
+    }
+
     // MARK: - Load Data
-    func loadData() async {
+
+    func loadData(force: Bool = false) async {
+        if !force, !Self.isDirty, let cached = Self.cachedResponse {
+            applyResponse(cached)
+            if let cachedGhosts = Self.cachedGhosts {
+                ghosts = cachedGhosts
+            }
+            errorMessage = nil
+            isLoading = false
+            return
+        }
+
         isLoading = true
         errorMessage = nil
+        loadingProgress = 0.0
+        loadingPhase = 0
+
+        let animator = Task { await runProgressAnimation() }
 
         do {
-            // TODO: Replace with a parallel call to GET /v1/investor-dna once the endpoint is ready.
-            // That response should contain the 6 scores and write directly into the @Published vars:
-            //   intensityScore    = response.intensity
-            //   momentumScore     = response.momentum
-            //   convictionScore   = response.conviction
-            //   cautionScore      = response.caution
-            //   deliberationScore = response.deliberation
-            //   sensitivityScore  = response.sensitivity
+            async let dnaTask: InvestorDNAResponse = apiClient.getInvestorDNA()
+            async let ghostsTask: GhostListResponse = apiClient.listGhosts(limit: 100)
 
-            let response = try await apiClient.listGhosts(limit: 100)
-            ghosts = response.ghosts
+            let (dna, ghostList) = try await (dnaTask, ghostsTask)
 
-            // NOTE: Score values are currently driven by the hardcoded @Published defaults above.
-            // When GET /v1/investor-dna is ready, replace those defaults with the API response here.
-            // computeMetricsLocally(from: ghosts) is available below as a local fallback if needed.
+            applyResponse(dna)
+            ghosts = ghostList.ghosts
 
+            Self.cachedResponse = dna
+            Self.cachedGhosts = ghostList.ghosts
+            Self.isDirty = false
         } catch {
             errorMessage = error.localizedDescription
         }
 
+        animator.cancel()
+        loadingProgress = 1.0
+        try? await Task.sleep(nanoseconds: 250_000_000)
+
         isLoading = false
     }
 
+    private func applyResponse(_ response: InvestorDNAResponse) {
+        intensityScore    = response.scores.intensity
+        momentumScore     = response.scores.momentum
+        convictionScore   = response.scores.conviction
+        cautionScore      = response.scores.caution
+        deliberationScore = response.scores.deliberation
+        sensitivityScore  = response.scores.sensitivity
+
+        personalizedInsights = [
+            "intensity":    response.insights.intensity,
+            "momentum":     response.insights.momentum,
+            "conviction":   response.insights.conviction,
+            "caution":      response.insights.caution,
+            "deliberation": response.insights.deliberation,
+            "sensitivity":  response.insights.sensitivity
+        ]
+        ghostsAnalyzed = response.ghostsAnalyzed
+    }
+
+    private func runProgressAnimation() async {
+        let start = Date()
+        let phaseDurationSeconds: Double = 1.6
+        let totalPhases = 6
+
+        while !Task.isCancelled {
+            let elapsed = Date().timeIntervalSince(start)
+            let target = 0.95 * (1.0 - exp(-elapsed / 6.0))
+            await MainActor.run {
+                if target > self.loadingProgress { self.loadingProgress = target }
+                self.loadingPhase = min(totalPhases - 1, Int(elapsed / phaseDurationSeconds))
+            }
+            try? await Task.sleep(nanoseconds: 100_000_000)
+        }
+    }
+
     // MARK: - Local Metric Computation
-    /// Computes 6 trait scores from ghost data using heuristics on hesitation tags and directions.
-    /// This is a local fallback — replace with API scores when GET /v1/investor-dna is available.
+
     private func computeMetricsLocally(from ghosts: [Ghost]) {
         guard !ghosts.isEmpty else { return }
 

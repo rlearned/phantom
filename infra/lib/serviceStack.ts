@@ -122,6 +122,7 @@ export class ServiceStack extends cdk.Stack {
         CACHE_TABLE_NAME: this.cacheTable.tableName,
         ALPACA_API_KEY_ID: process.env.ALPACA_API_KEY_ID || '',
         ALPACA_API_SECRET_KEY: process.env.ALPACA_API_SECRET_KEY || '',
+        DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY || '',
       },
       logRetention: logs.RetentionDays.TWO_WEEKS,
     });
@@ -218,6 +219,13 @@ export class ServiceStack extends cdk.Stack {
 
     this.httpApi.addRoutes({
       path: '/v1/market/candles',
+      methods: [apigatewayv2.HttpMethod.GET],
+      integration: integration,
+      authorizer: authorizer,
+    });
+
+    this.httpApi.addRoutes({
+      path: '/v1/investor-dna',
       methods: [apigatewayv2.HttpMethod.GET],
       integration: integration,
       authorizer: authorizer,

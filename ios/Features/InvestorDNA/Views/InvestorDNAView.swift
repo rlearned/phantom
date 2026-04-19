@@ -63,12 +63,7 @@ struct InvestorDNAView: View {
     }
 
     private var loadingView: some View {
-        VStack {
-            Spacer()
-            ProgressView()
-                .scaleEffect(1.2)
-            Spacer()
-        }
+        DNALoadingView(viewModel: viewModel)
     }
 }
 
@@ -136,21 +131,17 @@ struct DNAInProgressView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
 
-                // Header
                 DNAHeaderView(
                     title: "Investor DNA",
                     subtitle: "Your profile is forming"
                 )
 
-                // Radar card — locked/blurred
                 DNARadarInProgressCard(viewModel: viewModel)
 
-                // Early signal banner
                 if let topTrait = viewModel.earlySignalTrait {
                     DNAEarlySignalBanner(trait: topTrait, ghostCount: viewModel.ghostCount)
                 }
 
-                // Disclaimer
                 Text("Your profile becomes more reliable with more data. Keep logging to build confidence in these patterns.")
                     .font(.system(size: 11, weight: .regular))
                     .foregroundColor(Color(hex: "#C5C5CD"))
@@ -160,6 +151,9 @@ struct DNAInProgressView: View {
             }
             .padding(.horizontal, 20)
             .padding(.top, 12)
+        }
+        .refreshable {
+            await viewModel.loadData(force: true)
         }
     }
 }
@@ -273,13 +267,11 @@ struct DNAFilledView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
 
-                // Header
                 DNAHeaderView(
                     title: "Investor DNA",
                     subtitle: "Your behavioral profile based on \(viewModel.ghostCount) ghost trades"
                 )
 
-                // Tappable radar card
                 Button {
                     showRadarDrillDown = true
                 } label: {
@@ -287,7 +279,6 @@ struct DNAFilledView: View {
                 }
                 .buttonStyle(.plain)
 
-                // Dominant Tendencies section
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Your Dominant Tendencies")
                         .font(.system(size: 17, weight: .semibold))
@@ -303,7 +294,6 @@ struct DNAFilledView: View {
                     }
                 }
 
-                // Disclaimer
                 Text("Based on patterns in your ghost trades. This is not a prediction or financial assessment.")
                     .font(.system(size: 11, weight: .regular))
                     .foregroundColor(Color(hex: "#C5C5CD"))
@@ -313,6 +303,9 @@ struct DNAFilledView: View {
             }
             .padding(.horizontal, 20)
             .padding(.top, 12)
+        }
+        .refreshable {
+            await viewModel.loadData(force: true)
         }
     }
 }
@@ -576,13 +569,13 @@ struct DNATraitDetailView: View {
                             .stroke(Color(hex: "#F0F0F3"), lineWidth: 1)
                     )
 
-                    // What this means card
+                    // What this means card — prefers the backend-personalized insight when available.
                     VStack(alignment: .leading, spacing: 10) {
                         Text("What this means")
                             .font(.system(size: 17, weight: .semibold))
                             .foregroundColor(Color(hex: "#5B37D4"))
 
-                        Text(trait.meaning)
+                        Text(viewModel.meaning(for: trait))
                             .font(.system(size: 15, weight: .regular))
                             .foregroundColor(Color(hex: "#1A1A1F"))
                             .fixedSize(horizontal: false, vertical: true)

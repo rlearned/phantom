@@ -32,4 +32,6 @@ public class Ghost {
     private String voiceKey;
     private String status;
     private Map<String, Object> loggedQuote;
+    private Double emotionStress;     // 0.0 = calm, 1.0 = high stress
+    private Double emotionSentiment;  // 0.0 = fear, 1.0 = greed
 }

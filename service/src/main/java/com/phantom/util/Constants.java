@@ -9,6 +9,7 @@ public final class Constants {
     public static final String CACHE_TABLE_NAME = System.getenv().getOrDefault("CACHE_TABLE_NAME", "phantom-cache");
     public static final String ALPACA_API_KEY_ID = System.getenv().getOrDefault("ALPACA_API_KEY_ID", "");
     public static final String ALPACA_API_SECRET_KEY = System.getenv().getOrDefault("ALPACA_API_SECRET_KEY", "");
+    public static final String DEEPSEEK_API_KEY = System.getenv().getOrDefault("DEEPSEEK_API_KEY", "");
     
     public static final String PK_USER_PREFIX = "USER#";
     public static final String SK_PROFILE = "PROFILE";
@@ -73,6 +74,8 @@ public final class Constants {
     public static final String REQUEST_KEY_VOICE_KEY = "voiceKey";
     public static final String REQUEST_KEY_STATUS = "status";
     public static final String REQUEST_KEY_LIMIT = "limit";
+    public static final String REQUEST_KEY_EMOTION_STRESS = "emotionStress";
+    public static final String REQUEST_KEY_EMOTION_SENTIMENT = "emotionSentiment";
     
     public static final String RESPONSE_KEY_GHOST_ID = "ghostId";
     public static final String RESPONSE_KEY_USER_ID = "userId";
@@ -104,6 +107,8 @@ public final class Constants {
     public static final String ATTR_VOICE_KEY = "voiceKey";
     public static final String ATTR_STATUS = "status";
     public static final String ATTR_LOGGED_QUOTE = "loggedQuote";
+    public static final String ATTR_EMOTION_STRESS = "emotionStress";
+    public static final String ATTR_EMOTION_SENTIMENT = "emotionSentiment";
     
     public static final int CACHE_TTL_PRICE_SECONDS = 15;
     public static final int CACHE_TTL_TIMESERIES_SECONDS = 21600;

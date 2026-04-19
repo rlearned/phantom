@@ -8,7 +8,9 @@ import com.phantom.controller.*;
 import com.phantom.repository.AppRepository;
 import com.phantom.repository.CacheRepository;
 import com.phantom.service.DashboardService;
+import com.phantom.service.DeepSeekClient;
 import com.phantom.service.GhostService;
+import com.phantom.service.InvestorDNAService;
 import com.phantom.service.MarketDataService;
 import com.phantom.service.UserService;
 import com.phantom.util.ResponseBuilder;
@@ -28,24 +30,28 @@ public class ApiHandler implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
     private final MarketController marketController;
     private final AchievementController achievementController;
     private final StreakController streakController;
-    
+    private final InvestorDNAController investorDNAController;
+
     public ApiHandler() {
         DynamoDbClient dynamoDbClient = DynamoDbClient.create();
-        
+
         AppRepository appRepository = new AppRepository(dynamoDbClient);
         CacheRepository cacheRepository = new CacheRepository(dynamoDbClient);
-        
+
         UserService userService = new UserService(appRepository);
         MarketDataService marketDataService = new MarketDataService(cacheRepository);
         GhostService ghostService = new GhostService(appRepository, marketDataService);
         DashboardService dashboardService = new DashboardService(appRepository);
-        
+        DeepSeekClient deepSeekClient = new DeepSeekClient();
+        InvestorDNAService investorDNAService = new InvestorDNAService(appRepository, deepSeekClient);
+
         this.userController = new UserController(userService);
         this.ghostController = new GhostController(ghostService);
         this.dashboardController = new DashboardController(dashboardService);
         this.marketController = new MarketController(marketDataService);
         this.achievementController = new AchievementController();
         this.streakController = new StreakController();
+        this.investorDNAController = new InvestorDNAController(investorDNAService);
     }
     
     @Override
@@ -97,7 +103,11 @@ public class ApiHandler implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
             if (path.equals("/v1/market/candles") && method.equals("GET")) {
                 return marketController.getMarketCandles(event);
             }
-            
+
+            if (path.equals("/v1/investor-dna") && method.equals("GET")) {
+                return investorDNAController.getInvestorDNA(event, userId);
+            }
+
             return ResponseBuilder.notFound("Route not found");
             
         } catch (Exception e) {

@@ -94,15 +94,18 @@ public class GhostController {
                         json.get(Constants.REQUEST_KEY_HESITATION_TAGS), List.class);
             }
             
-            String noteText = json.has(Constants.REQUEST_KEY_NOTE_TEXT) ? 
+            String noteText = json.has(Constants.REQUEST_KEY_NOTE_TEXT) ?
                     json.get(Constants.REQUEST_KEY_NOTE_TEXT).asText() : null;
-            String voiceKey = json.has(Constants.REQUEST_KEY_VOICE_KEY) ? 
+            String voiceKey = json.has(Constants.REQUEST_KEY_VOICE_KEY) ?
                     json.get(Constants.REQUEST_KEY_VOICE_KEY).asText() : null;
-            
-            Ghost ghost = ghostService.createGhost(userId, ticker, direction, priceSource, 
-                    intendedPrice, consideredAtEpochMs, quantityType, intendedSize, 
-                    hesitationTags, noteText, voiceKey);
-            
+
+            Double emotionStress = parseOptionalDouble(json, Constants.REQUEST_KEY_EMOTION_STRESS);
+            Double emotionSentiment = parseOptionalDouble(json, Constants.REQUEST_KEY_EMOTION_SENTIMENT);
+
+            Ghost ghost = ghostService.createGhost(userId, ticker, direction, priceSource,
+                    intendedPrice, consideredAtEpochMs, quantityType, intendedSize,
+                    hesitationTags, noteText, voiceKey, emotionStress, emotionSentiment);
+
             return ResponseBuilder.created(mapGhostToResponse(ghost));
         } catch (IllegalArgumentException e) {
             log.error("Invalid request for creating ghost", e);
@@ -156,13 +159,17 @@ public class GhostController {
                 return ResponseBuilder.notFound("Ghost not found");
             }
             
-            String status = json.has(Constants.REQUEST_KEY_STATUS) ? 
+            String status = json.has(Constants.REQUEST_KEY_STATUS) ?
                     json.get(Constants.REQUEST_KEY_STATUS).asText() : null;
-            String noteText = json.has(Constants.REQUEST_KEY_NOTE_TEXT) ? 
+            String noteText = json.has(Constants.REQUEST_KEY_NOTE_TEXT) ?
                     json.get(Constants.REQUEST_KEY_NOTE_TEXT).asText() : null;
-            
-            Ghost ghost = ghostService.updateGhost(userId, sk, status, noteText);
-            
+
+            Double emotionStress = parseOptionalDouble(json, Constants.REQUEST_KEY_EMOTION_STRESS);
+            Double emotionSentiment = parseOptionalDouble(json, Constants.REQUEST_KEY_EMOTION_SENTIMENT);
+
+            Ghost ghost = ghostService.updateGhost(userId, sk, status, noteText,
+                    emotionStress, emotionSentiment);
+
             return ResponseBuilder.ok(mapGhostToResponse(ghost));
         } catch (Exception e) {
             log.error("Error updating ghost", e);
@@ -170,6 +177,13 @@ public class GhostController {
         }
     }
     
+    private static Double parseOptionalDouble(JsonNode json, String key) {
+        if (json == null || !json.has(key) || json.get(key).isNull()) {
+            return null;
+        }
+        return json.get(key).asDouble();
+    }
+
     private Map<String, Object> mapGhostToResponse(Ghost ghost) {
         Map<String, Object> response = new HashMap<>();
         response.put(Constants.RESPONSE_KEY_GHOST_ID, ghost.getGhostId());
@@ -188,6 +202,8 @@ public class GhostController {
         response.put(Constants.REQUEST_KEY_VOICE_KEY, ghost.getVoiceKey());
         response.put(Constants.REQUEST_KEY_STATUS, ghost.getStatus());
         response.put(Constants.RESPONSE_KEY_LOGGED_QUOTE, ghost.getLoggedQuote());
+        response.put(Constants.REQUEST_KEY_EMOTION_STRESS, ghost.getEmotionStress());
+        response.put(Constants.REQUEST_KEY_EMOTION_SENTIMENT, ghost.getEmotionSentiment());
         return response;
     }
 }

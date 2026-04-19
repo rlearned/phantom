@@ -23,7 +23,9 @@ struct Ghost: Codable, Identifiable {
     let voiceKey: String?
     let status: String
     let loggedQuote: QuoteData
-    
+    let emotionStress: Double?      // 0.0 = calm, 1.0 = high stress
+    let emotionSentiment: Double?   // 0.0 = fear, 1.0 = greed
+
     var id: String { ghostId }
     
     var createdDate: Date {
@@ -53,11 +55,15 @@ struct CreateGhostRequest: Codable {
     let hesitationTags: [String]?
     let noteText: String?
     let voiceKey: String?
+    let emotionStress: Double?
+    let emotionSentiment: Double?
 }
 
 struct UpdateGhostRequest: Codable {
     let status: String?
     let noteText: String?
+    let emotionStress: Double?
+    let emotionSentiment: Double?
 }
 
 struct GhostListResponse: Codable {

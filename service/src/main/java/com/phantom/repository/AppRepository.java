@@ -98,7 +98,15 @@ public class AppRepository extends DynamoDbRepository {
         if (ghost.getVoiceKey() != null) {
             item.put(Constants.ATTR_VOICE_KEY, AttributeValue.builder().s(ghost.getVoiceKey()).build());
         }
-        
+
+        if (ghost.getEmotionStress() != null) {
+            item.put(Constants.ATTR_EMOTION_STRESS, AttributeValue.builder().n(ghost.getEmotionStress().toString()).build());
+        }
+
+        if (ghost.getEmotionSentiment() != null) {
+            item.put(Constants.ATTR_EMOTION_SENTIMENT, AttributeValue.builder().n(ghost.getEmotionSentiment().toString()).build());
+        }
+
         putItem(item);
     }
     
@@ -185,6 +193,8 @@ public class AppRepository extends DynamoDbRepository {
         ghost.setVoiceKey(getStringAttribute(item, Constants.ATTR_VOICE_KEY));
         ghost.setStatus(getStringAttribute(item, Constants.ATTR_STATUS));
         ghost.setLoggedQuote(getMapAttribute(item, Constants.ATTR_LOGGED_QUOTE));
+        ghost.setEmotionStress(getDoubleAttribute(item, Constants.ATTR_EMOTION_STRESS));
+        ghost.setEmotionSentiment(getDoubleAttribute(item, Constants.ATTR_EMOTION_SENTIMENT));
         return ghost;
     }
     

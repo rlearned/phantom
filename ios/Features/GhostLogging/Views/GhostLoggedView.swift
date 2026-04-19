@@ -114,7 +114,7 @@ struct GhostLoggedView: View {
             NotesView(viewModel: viewModel)
         }
         .sheet(isPresented: $showingEmotion) {
-            EmotionView()
+            EmotionView(viewModel: viewModel)
         }
     }
 }

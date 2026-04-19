@@ -26,7 +26,8 @@ public class GhostService {
     
     public Ghost createGhost(String userId, String ticker, String direction, String priceSource,
                             Double intendedPrice, Long consideredAtEpochMs, String quantityType,
-                            Double intendedSize, List<String> hesitationTags, String noteText, String voiceKey) {
+                            Double intendedSize, List<String> hesitationTags, String noteText, String voiceKey,
+                            Double emotionStress, Double emotionSentiment) {
         log.info("Creating ghost for userId: {}, ticker: {}, priceSource: {}", userId, ticker, priceSource);
         
         String normalizedTicker = ticker.trim().toUpperCase();
@@ -100,7 +101,9 @@ public class GhostService {
         ghost.setVoiceKey(voiceKey);
         ghost.setStatus(Constants.STATUS_OPEN);
         ghost.setLoggedQuote(loggedQuote);
-        
+        ghost.setEmotionStress(clampUnit(emotionStress));
+        ghost.setEmotionSentiment(clampUnit(emotionSentiment));
+
         appRepository.saveGhost(ghost);
         
         updateDashboardOnGhostCreate(userId, createdAtEpochMs, hesitationTags);
@@ -128,26 +131,41 @@ public class GhostService {
         return appRepository.listGhosts(userId, effectiveLimit);
     }
     
-    public Ghost updateGhost(String userId, String sk, String status, String noteText) {
+    public Ghost updateGhost(String userId, String sk, String status, String noteText,
+                             Double emotionStress, Double emotionSentiment) {
         log.info("Updating ghost for userId: {}, sk: {}", userId, sk);
-        
+
         Ghost ghost = appRepository.getGhost(userId, sk);
-        
+
         if (ghost == null) {
             throw new RuntimeException("Ghost not found");
         }
-        
+
         if (status != null) {
             ghost.setStatus(status);
         }
-        
+
         if (noteText != null) {
             ghost.setNoteText(noteText);
         }
-        
+
+        if (emotionStress != null) {
+            ghost.setEmotionStress(clampUnit(emotionStress));
+        }
+
+        if (emotionSentiment != null) {
+            ghost.setEmotionSentiment(clampUnit(emotionSentiment));
+        }
+
         appRepository.saveGhost(ghost);
-        
+
         return ghost;
+    }
+
+    private Double clampUnit(Double value) {
+        if (value == null) return null;
+        if (value.isNaN() || value.isInfinite()) return null;
+        return Math.max(0.0, Math.min(1.0, value));
     }
     
     private Map<String, Object> createManualQuote(double price, long capturedAtEpochMs) {

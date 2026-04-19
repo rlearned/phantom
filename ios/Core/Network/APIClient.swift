@@ -190,12 +190,18 @@ class APIClient {
         return try await self.request(endpoint: "/v1/market/quote?symbol=\(symbol)")
     }
     
+    // MARK: - Investor DNA
+
+    func getInvestorDNA() async throws -> InvestorDNAResponse {
+        return try await self.request(endpoint: "/v1/investor-dna")
+    }
+
     // MARK: - Health Check
-    
+
     func healthCheck() async throws -> [String: String] {
         return try await self.request(endpoint: "/v1/health", requiresAuth: false)
     }
-    
+
     // TODO: Need a end point function for v1/market/candles
-    
+
 }

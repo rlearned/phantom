@@ -7,6 +7,46 @@
 
 import Foundation
 
+// MARK: - API Response
+
+/// Decoded response from `GET /v1/investor-dna`.
+struct InvestorDNAResponse: Codable {
+    let scores: InvestorDNAScores
+    let insights: InvestorDNAInsights
+    let ghostsAnalyzed: Int
+}
+
+struct InvestorDNAScores: Codable {
+    let intensity: Int
+    let momentum: Int
+    let conviction: Int
+    let caution: Int
+    let deliberation: Int
+    let sensitivity: Int
+}
+
+struct InvestorDNAInsights: Codable {
+    let intensity: String
+    let momentum: String
+    let conviction: String
+    let caution: String
+    let deliberation: String
+    let sensitivity: String
+
+    /// Lookup by trait id (matches `TraitInfo.id`).
+    func value(for traitId: String) -> String? {
+        switch traitId {
+        case "intensity":    return intensity
+        case "momentum":     return momentum
+        case "conviction":   return conviction
+        case "caution":      return caution
+        case "deliberation": return deliberation
+        case "sensitivity":  return sensitivity
+        default:             return nil
+        }
+    }
+}
+
 // MARK: - Investor Archetype
 
 enum InvestorArchetype: String {
