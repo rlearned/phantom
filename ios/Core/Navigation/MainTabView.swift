@@ -10,7 +10,8 @@ import SwiftUI
 enum AppTab {
     case home
     case dashboard
-    case book
+    case ghosts
+    case dna
     case profile
 }
 
@@ -19,7 +20,6 @@ struct MainTabView: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            // Page content
             Group {
                 switch selectedTab {
                 case .home:
@@ -28,7 +28,9 @@ struct MainTabView: View {
                     DashboardView(navigateToHome: {
                         selectedTab = .home
                     })
-                case .book:
+                case .ghosts:
+                    RecentGhostsView()
+                case .dna:
                     InvestorDNAView()
                 case .profile:
                     ProfileView()
@@ -36,7 +38,6 @@ struct MainTabView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            // Custom Bottom Tab Bar
             BottomTabBar(selectedTab: $selectedTab)
         }
         .ignoresSafeArea(edges: .bottom)
@@ -48,7 +49,6 @@ struct BottomTabBar: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            // House → Home
             TabBarItem(
                 icon: "house",
                 isSelected: selectedTab == .home
@@ -56,9 +56,6 @@ struct BottomTabBar: View {
                 selectedTab = .home
             }
 
-            // Plus → Dashboard (Ghost Logging)
-            // "plus.fill" does not exist in SF Symbols, so we pass selectedIcon: "plus"
-            // so the icon stays visible (just turns black) when this tab is active.
             TabBarItem(
                 icon: "plus",
                 selectedIcon: "plus",
@@ -67,15 +64,19 @@ struct BottomTabBar: View {
                 selectedTab = .dashboard
             }
 
-            // Book → Investor DNA (static placeholder)
             TabBarItem(
                 icon: "book",
-                isSelected: selectedTab == .book
+                isSelected: selectedTab == .ghosts
             ) {
-                selectedTab = .book
+                selectedTab = .ghosts
             }
 
-            // Person → Profile
+            DNATabBarItem(
+                isSelected: selectedTab == .dna
+            ) {
+                selectedTab = .dna
+            }
+
             TabBarItem(
                 icon: "person.crop.circle",
                 isSelected: selectedTab == .profile
@@ -83,9 +84,9 @@ struct BottomTabBar: View {
                 selectedTab = .profile
             }
         }
-        .padding(.horizontal, 24)
+        .padding(.horizontal, 20)
         .padding(.top, 12)
-        .padding(.bottom, 28) // Account for home indicator safe area
+        .padding(.bottom, 28)
         .background(
             Color.white
                 .shadow(color: Color.black.opacity(0.08), radius: 12, x: 0, y: -4)
@@ -95,9 +96,6 @@ struct BottomTabBar: View {
 
 struct TabBarItem: View {
     let icon: String
-    /// The icon to show when this tab is selected.
-    /// Defaults to "\(icon).fill". Pass an explicit value for icons
-    /// that have no fill variant (e.g. "plus").
     var selectedIcon: String? = nil
     let isSelected: Bool
     let action: () -> Void
@@ -109,6 +107,29 @@ struct TabBarItem: View {
                 .foregroundColor(isSelected ? .phantomPurple : Color.black.opacity(0.35))
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 4)
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+// MARK: - DNA Tab Bar Item
+
+struct DNATabBarItem: View {
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            ZStack {
+                Circle()
+                    .fill(isSelected ? Color.phantomPurple : Color.phantomPurple.opacity(0.12))
+                    .frame(width: 42, height: 42)
+                Image(systemName: "atom")
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundColor(isSelected ? .white : .phantomPurple)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 4)
         }
         .buttonStyle(.plain)
     }

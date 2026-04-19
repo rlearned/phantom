@@ -27,6 +27,8 @@
 		AA000005BBBB00010045F545 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000004BBBB00010045F545 /* HomeView.swift */; };
 		DD000002DDF00010045F545 /* InvestorDNAView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD000001DDF00010045F545 /* InvestorDNAView.swift */; };
 		DD000022DDF00010045F545 /* DNALoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD000020DDF00010045F545 /* DNALoadingView.swift */; };
+		EE000002GGGG00010045F545 /* RecentGhostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE000001GGGG00010045F545 /* RecentGhostsView.swift */; };
+		EE000004GGGG00010045F545 /* RecentGhostsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE000003GGGG00010045F545 /* RecentGhostsViewModel.swift */; };
 		DD000006DDF00010045F545 /* InvestorDNAProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD000005DDF00010045F545 /* InvestorDNAProfile.swift */; };
 		DD000008DDF00010045F545 /* InvestorDNAViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD000007DDF00010045F545 /* InvestorDNAViewModel.swift */; };
 		C0901A022F4C80000045F545 /* CognitoConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0901A012F4C80000045F545 /* CognitoConfig.swift */; };
@@ -80,6 +82,8 @@
 		AA000004BBBB00010045F545 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		DD000001DDF00010045F545 /* InvestorDNAView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestorDNAView.swift; sourceTree = "<group>"; };
 		DD000020DDF00010045F545 /* DNALoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DNALoadingView.swift; sourceTree = "<group>"; };
+		EE000001GGGG00010045F545 /* RecentGhostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentGhostsView.swift; sourceTree = "<group>"; };
+		EE000003GGGG00010045F545 /* RecentGhostsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentGhostsViewModel.swift; sourceTree = "<group>"; };
 		DD000005DDF00010045F545 /* InvestorDNAProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestorDNAProfile.swift; sourceTree = "<group>"; };
 		DD000007DDF00010045F545 /* InvestorDNAViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvestorDNAViewModel.swift; sourceTree = "<group>"; };
 		C0901A012F4C80000045F545 /* CognitoConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitoConfig.swift; sourceTree = "<group>"; };
@@ -338,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				E5441A682F2D776A0045F545 /* DashboardViewModel.swift */,
+				EE000003GGGG00010045F545 /* RecentGhostsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -347,6 +352,7 @@
 			children = (
 				E5441A6A2F2D776A0045F545 /* DashboardView.swift */,
 				E5441A6B2F2D776A0045F545 /* GhostListView.swift */,
+				EE000001GGGG00010045F545 /* RecentGhostsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -591,6 +597,8 @@
 				AA000011BBBB00010045F545 /* StreakView.swift in Sources */,
 				DD000002DDF00010045F545 /* InvestorDNAView.swift in Sources */,
 				DD000022DDF00010045F545 /* DNALoadingView.swift in Sources */,
+				EE000002GGGG00010045F545 /* RecentGhostsView.swift in Sources */,
+				EE000004GGGG00010045F545 /* RecentGhostsViewModel.swift in Sources */,
 				DD000006DDF00010045F545 /* InvestorDNAProfile.swift in Sources */,
 				DD000008DDF00010045F545 /* InvestorDNAViewModel.swift in Sources */,
 				FA000002CCCC00010045F545 /* HesitationTaxViewModel.swift in Sources */,

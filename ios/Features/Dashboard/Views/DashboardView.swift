@@ -92,37 +92,6 @@ struct DashboardView: View {
                             }
                         }
                         
-                        // Ghost List
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("Recent Ghosts")
-                                .phantomHeadlineStyle()
-                                .frame(maxWidth: .infinity, alignment: .center)
-                            
-                            if viewModel.isLoading {
-                                ProgressView()
-                                    .padding()
-                            } else if let ghosts = viewModel.ghosts, !ghosts.isEmpty {
-                                ForEach(ghosts.prefix(5)) { ghost in
-                                    GhostListItem(ghost: ghost)
-                                }
-                                
-                                if ghosts.count > 5 {
-                                    NavigationLink("View All Ghosts") {
-                                        GhostListView()
-                                    }
-                                    .font(.phantomBodyMedium)
-                                    .foregroundColor(.phantomPurple)
-                                    .padding(.top, 8)
-                                }
-                            } else {
-                                Text("No ghosts yet. Start logging!")
-                                    .font(.phantomBodyMedium)
-                                    .foregroundColor(.phantomTextSecondary)
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                                    .padding()
-                            }
-                        }
-                        
                         if let errorMessage = viewModel.errorMessage {
                             Text(errorMessage)
                                 .font(.phantomBodySmall)
