@@ -30,7 +30,7 @@ struct InvestorDNAView: View {
     var body: some View {
         ZStack {
             // Full-screen white background — always covers the entire page
-            Color.white.ignoresSafeArea()
+            Color.phantomSurface.ignoresSafeArea()
 
             if viewModel.isLoading {
                 loadingView
@@ -106,7 +106,7 @@ struct DNAEmptyView: View {
                 } label: {
                     Text("Log a Ghost")
                         .font(.system(size: 17, weight: .semibold))
-                        .foregroundColor(.white)
+                        .foregroundColor(.phantomOnAccent)
                         .padding(.horizontal, 32)
                         .padding(.vertical, 14)
                         .background(Color.phantomPurple)
@@ -215,7 +215,7 @@ private struct DNARadarInProgressCard: View {
             }
         }
         .padding(24)
-        .background(Color.white)
+        .background(Color.phantomSurface)
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
@@ -332,7 +332,7 @@ private struct DNARadarFilledCard: View {
             .frame(height: 240)
         }
         .padding(24)
-        .background(Color.white)
+        .background(Color.phantomSurface)
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
@@ -764,7 +764,7 @@ struct DNASpectrumBar: View {
 
                 // Marker circle — white fill, purple border
                 Circle()
-                    .fill(Color.white)
+                    .fill(Color.phantomSurface)
                     .frame(width: markerSize, height: markerSize)
                     .shadow(color: Color.black.opacity(0.18), radius: 2, x: 0, y: 1)
                     .overlay(

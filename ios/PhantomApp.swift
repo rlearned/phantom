@@ -10,19 +10,23 @@ import SwiftUI
 @main
 struct PhantomApp: App {
     @StateObject private var authManager = AuthManager.shared
-    
+    @AppStorage("darkModeEnabled") private var darkModeEnabled: Bool = false
+
     var body: some Scene {
         WindowGroup {
-            switch authManager.authState {
-            case .signedIn:
-                MainTabView()
-            case .confirmingSignUp:
-                ConfirmSignUpView()
-            case .onboarding:
-                OnboardingContainerView()
-            case .signedOut:
-                LoginView()
+            Group {
+                switch authManager.authState {
+                case .signedIn:
+                    MainTabView()
+                case .confirmingSignUp:
+                    ConfirmSignUpView()
+                case .onboarding:
+                    OnboardingContainerView()
+                case .signedOut:
+                    LoginView()
+                }
             }
+            .preferredColorScheme(darkModeEnabled ? .dark : .light)
         }
     }
 }

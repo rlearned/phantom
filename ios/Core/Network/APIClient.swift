@@ -126,8 +126,69 @@ class APIClient {
         }
     }
     
+    // MARK: - Generic No-Content Request
+
+    private func requestNoContent(
+        endpoint: String,
+        method: String,
+        requiresAuth: Bool = true,
+        isRetry: Bool = false
+    ) async throws {
+        guard let url = URL(string: baseURL + endpoint) else {
+            throw APIError.invalidURL
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = method
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        if requiresAuth {
+            guard let token = AuthManager.shared.getAccessToken() else {
+                throw APIError.unauthorized
+            }
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+
+        do {
+            let (_, response) = try await session.data(for: request)
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw APIError.invalidResponse
+            }
+
+            switch httpResponse.statusCode {
+            case 200...299:
+                return
+            case 401:
+                if !isRetry && requiresAuth {
+                    try await AuthManager.shared.refreshTokens()
+                    return try await self.requestNoContent(
+                        endpoint: endpoint,
+                        method: method,
+                        requiresAuth: requiresAuth,
+                        isRetry: true
+                    )
+                }
+                AuthManager.shared.signOut()
+                throw APIError.unauthorized
+            case 404:
+                throw APIError.notFound
+            case 400...499:
+                throw APIError.serverError("Client error: \(httpResponse.statusCode)")
+            case 500...599:
+                throw APIError.serverError("Server error: \(httpResponse.statusCode)")
+            default:
+                throw APIError.serverError("Unexpected status code: \(httpResponse.statusCode)")
+            }
+        } catch let error as APIError {
+            throw error
+        } catch {
+            throw APIError.networkError(error)
+        }
+    }
+
     // MARK: - Ghost Endpoints
-    
+
     func createGhost(_ request: CreateGhostRequest) async throws -> Ghost {
         return try await self.request(
             endpoint: "/v1/ghosts",
@@ -135,20 +196,27 @@ class APIClient {
             body: request
         )
     }
-    
+
     func listGhosts(limit: Int = 50) async throws -> GhostListResponse {
         return try await self.request(endpoint: "/v1/ghosts?limit=\(limit)")
     }
-    
+
     func getGhost(ghostId: String) async throws -> Ghost {
         return try await self.request(endpoint: "/v1/ghosts/\(ghostId)")
     }
-    
+
     func updateGhost(ghostId: String, request: UpdateGhostRequest) async throws -> Ghost {
         return try await self.request(
             endpoint: "/v1/ghosts/\(ghostId)",
             method: "PATCH",
             body: request
+        )
+    }
+
+    func deleteGhost(ghostId: String) async throws {
+        try await self.requestNoContent(
+            endpoint: "/v1/ghosts/\(ghostId)",
+            method: "DELETE"
         )
     }
     

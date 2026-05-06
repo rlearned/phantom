@@ -70,7 +70,14 @@ struct GhostListView: View {
 
 struct GhostDetailView: View {
     let ghost: Ghost
+    let onDelete: (() -> Void)?
     @Environment(\.dismiss) var dismiss
+    @State private var isConfirmingDelete = false
+
+    init(ghost: Ghost, onDelete: (() -> Void)? = nil) {
+        self.ghost = ghost
+        self.onDelete = onDelete
+    }
 
     private var directionUpper: String { ghost.direction.uppercased() }
     private var isBuy: Bool { directionUpper == "BUY" }
@@ -121,6 +128,31 @@ struct GhostDetailView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if onDelete != nil {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(role: .destructive) {
+                        isConfirmingDelete = true
+                    } label: {
+                        Image(systemName: "trash")
+                            .foregroundColor(Color(hex: "#C7341E"))
+                    }
+                }
+            }
+        }
+        .confirmationDialog(
+            "Delete this ghost?",
+            isPresented: $isConfirmingDelete,
+            titleVisibility: .visible
+        ) {
+            Button("Delete \(ghost.ticker)", role: .destructive) {
+                dismiss()
+                onDelete?()
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This permanently removes this logged ghost.")
+        }
     }
 
     // MARK: - Hero
@@ -161,7 +193,7 @@ struct GhostDetailView: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white)
+        .background(Color.phantomSurface)
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
@@ -181,7 +213,7 @@ struct GhostDetailView: View {
             Divider().padding(.leading, 16)
             ModernDetailRow(label: "Source", value: ghost.priceSource.replacingOccurrences(of: "_", with: " ").capitalized)
         }
-        .background(Color.white)
+        .background(Color.phantomSurface)
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
@@ -211,7 +243,7 @@ struct GhostDetailView: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white)
+        .background(Color.phantomSurface)
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
@@ -251,7 +283,7 @@ struct GhostDetailView: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white)
+        .background(Color.phantomSurface)
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
@@ -275,7 +307,7 @@ struct GhostDetailView: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white)
+        .background(Color.phantomSurface)
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)

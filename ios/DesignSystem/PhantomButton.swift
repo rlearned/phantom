@@ -53,7 +53,7 @@ struct PhantomButton: View {
     private var textColor: Color {
         switch style {
         case .primary:
-            return .phantomWhite
+            return .phantomOnAccent
         case .secondary:
             return .phantomPurple
         case .tertiary:
@@ -95,7 +95,7 @@ struct PhantomSmallButton: View {
             Text(title)
                 .frame(maxWidth: .infinity)
                 .font(.phantomBodyMedium)
-                .foregroundColor(isSelected ? .phantomWhite : .phantomTextSecondary)
+                .foregroundColor(isSelected ? .phantomOnAccent : .phantomTextSecondary)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
                 .background(isSelected ? Color.phantomPurple : Color.clear)

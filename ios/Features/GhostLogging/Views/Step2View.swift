@@ -62,14 +62,14 @@ struct Step2View: View {
                                     HStack(spacing: 6) {
                                         Text(tag)
                                             .font(.phantomBodySmall)
-                                            .foregroundColor(.phantomWhite)
+                                            .foregroundColor(.phantomOnAccent)
 
                                         Button(action: {
                                             viewModel.selectedTags.removeAll { $0 == tag }
                                         }) {
                                             Image(systemName: "xmark")
                                                 .font(.system(size: 10))
-                                                .foregroundColor(.phantomWhite)
+                                                .foregroundColor(.phantomOnAccent)
                                         }
                                     }
                                     .padding(.horizontal, 12)

@@ -88,7 +88,7 @@ struct BottomTabBar: View {
         .padding(.top, 12)
         .padding(.bottom, 28)
         .background(
-            Color.white
+            Color.phantomSurface
                 .shadow(color: Color.black.opacity(0.08), radius: 12, x: 0, y: -4)
         )
     }
@@ -104,7 +104,7 @@ struct TabBarItem: View {
         Button(action: action) {
             Image(systemName: isSelected ? (selectedIcon ?? "\(icon).fill") : icon)
                 .font(.system(size: 24))
-                .foregroundColor(isSelected ? .phantomPurple : Color.black.opacity(0.35))
+                .foregroundColor(isSelected ? .phantomPurple : .phantomTabIconInactive)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 4)
         }
@@ -126,7 +126,7 @@ struct DNATabBarItem: View {
                     .frame(width: 42, height: 42)
                 Image(systemName: "atom")
                     .font(.system(size: 22, weight: .semibold))
-                    .foregroundColor(isSelected ? .white : .phantomPurple)
+                    .foregroundColor(isSelected ? .phantomOnAccent : .phantomPurple)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 4)

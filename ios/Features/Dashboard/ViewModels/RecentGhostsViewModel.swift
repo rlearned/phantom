@@ -136,4 +136,19 @@ class RecentGhostsViewModel: ObservableObject {
 
         isLoading = false
     }
+
+    // MARK: - Delete
+
+    func deleteGhost(_ ghost: Ghost) async {
+        let previous = ghosts
+        ghosts.removeAll { $0.ghostId == ghost.ghostId }
+
+        do {
+            try await apiClient.deleteGhost(ghostId: ghost.ghostId)
+            errorMessage = nil
+        } catch {
+            ghosts = previous
+            errorMessage = error.localizedDescription
+        }
+    }
 }

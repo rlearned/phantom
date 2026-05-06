@@ -52,7 +52,7 @@ struct HesitationTaxView: View {
                 // TODO: Implement per-ticker filtering — see TODOs on searchTicker above.
                 HStack(spacing: 8) {
                     Image(systemName: "magnifyingglass")
-                        .foregroundColor(Color.black.opacity(0.4))
+                        .foregroundColor(Color.phantomTextPrimary.opacity(0.4))
                         .font(.system(size: 14))
 
                     TextField("SEARCH TICKER (E.G. NVDA)", text: $searchTicker)
@@ -61,7 +61,7 @@ struct HesitationTaxView: View {
                         .disableAutocorrection(true)
                 }
                 .padding(12)
-                .background(Color.white)
+                .background(Color.phantomSurface)
                 .cornerRadius(24)
                 // Updated: shadow replaces black outline border
                 .shadow(color: Color.black.opacity(0.25), radius: 4, x: 0, y: 4)
@@ -111,7 +111,7 @@ struct HesitationTaxView: View {
                         }
                         .padding(12)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.white)
+                        .background(Color.phantomSurface)
                         .cornerRadius(16)
                         .overlay(
                             RoundedRectangle(cornerRadius: 16)
@@ -147,7 +147,7 @@ struct HesitationTaxView: View {
                         }
                         .padding(12)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.white)
+                        .background(Color.phantomSurface)
                         .cornerRadius(16)
                         .overlay(
                             RoundedRectangle(cornerRadius: 16)
@@ -165,7 +165,7 @@ struct HesitationTaxView: View {
                 // Data source: backend API endpoint for historical ghost trade performance.
                 VStack(alignment: .leading, spacing: 8) {
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.black.opacity(0.06))
+                        .fill(Color.phantomTextPrimary.opacity(0.06))
                         .frame(height: 120)
                         .overlay(
                             Text("Chart: Ghost vs. Actual Performance")
@@ -309,7 +309,7 @@ struct HesitationInfoCard<Content: View>: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white)
+        .background(Color.phantomSurface)
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)

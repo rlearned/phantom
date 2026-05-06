@@ -177,7 +177,7 @@ export class ServiceStack extends cdk.Stack {
 
     this.httpApi.addRoutes({
       path: '/v1/ghosts/{ghostId}',
-      methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.PATCH],
+      methods: [apigatewayv2.HttpMethod.GET, apigatewayv2.HttpMethod.PATCH, apigatewayv2.HttpMethod.DELETE],
       integration: integration,
       authorizer: authorizer,
     });

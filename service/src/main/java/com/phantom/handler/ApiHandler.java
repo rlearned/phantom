@@ -154,6 +154,8 @@ public class ApiHandler implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
                     return ghostController.getGhost(event, userId);
                 case "PATCH":
                     return ghostController.updateGhost(event, userId);
+                case "DELETE":
+                    return ghostController.deleteGhost(event, userId);
                 default:
                     return ResponseBuilder.badRequest("Method not allowed");
             }

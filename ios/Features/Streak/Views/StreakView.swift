@@ -85,7 +85,7 @@ struct StreakView: View {
             .padding(.horizontal, 24)
             .overlay(
                 RoundedRectangle(cornerRadius: 24)
-                    .stroke(Color.black, lineWidth: 1)
+                    .stroke(Color.phantomTextPrimary, lineWidth: 1)
             )
             .padding(.horizontal, 36)
 

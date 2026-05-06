@@ -13,7 +13,7 @@ struct PhantomTextFieldStyle: TextFieldStyle {
         configuration
             .font(.phantomBodyMedium)
             .padding()
-            .background(Color.white)
+            .background(Color.phantomSurface)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.phantomTextPrimary, lineWidth: 1)

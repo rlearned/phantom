@@ -116,7 +116,7 @@ struct DashboardView: View {
                         }) {
                             Image(systemName: "plus")
                                 .font(.system(size: 24, weight: .bold))
-                                .foregroundColor(.white)
+                                .foregroundColor(.phantomOnAccent)
                                 .frame(width: 64, height: 64)
                                 .background(Color.phantomPurple)
                                 .clipShape(Circle())
@@ -198,7 +198,7 @@ struct GhostListItem: View {
             }
         }
         .padding()
-        .background(Color.white)
+        .background(Color.phantomSurface)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.phantomTextSecondary.opacity(0.2), lineWidth: 1)

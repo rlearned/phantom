@@ -194,10 +194,10 @@ private struct PhaseTrail: View {
                     if i < currentPhase {
                         Image(systemName: "checkmark")
                             .font(.system(size: 9, weight: .bold))
-                            .foregroundColor(.white)
+                            .foregroundColor(.phantomOnAccent)
                     } else if i == currentPhase {
                         Circle()
-                            .fill(Color.white)
+                            .fill(Color.phantomOnAccent)
                             .frame(width: 6, height: 6)
                     }
                 }

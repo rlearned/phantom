@@ -162,6 +162,20 @@ public class GhostService {
         return ghost;
     }
 
+    public void deleteGhost(String userId, String sk) {
+        log.info("Deleting ghost for userId: {}, sk: {}", userId, sk);
+
+        Ghost ghost = appRepository.getGhost(userId, sk);
+
+        if (ghost == null) {
+            throw new RuntimeException("Ghost not found");
+        }
+
+        appRepository.deleteGhost(userId, sk);
+
+        updateDashboardOnGhostDelete(userId, ghost.getCreatedAtEpochMs());
+    }
+
     private Double clampUnit(Double value) {
         if (value == null) return null;
         if (value.isNaN() || value.isInfinite()) return null;
@@ -179,7 +193,7 @@ public class GhostService {
     
     private void updateDashboardOnGhostCreate(String userId, long createdAtEpochMs, List<String> hesitationTags) {
         DashboardSummary summary = appRepository.getDashboardSummary(userId);
-        
+
         if (summary == null) {
             summary = new DashboardSummary();
             summary.setPk(Constants.PK_USER_PREFIX + userId);
@@ -188,11 +202,32 @@ public class GhostService {
             summary.setGhostCountTotal(0);
             summary.setGhostCount30d(0);
         }
-        
+
         summary.setGhostCountTotal(summary.getGhostCountTotal() + 1);
         summary.setGhostCount30d(summary.getGhostCount30d() + 1);
         summary.setLastGhostAtEpochMs(createdAtEpochMs);
-        
+
+        appRepository.saveDashboardSummary(summary);
+    }
+
+    private void updateDashboardOnGhostDelete(String userId, long deletedGhostCreatedAtEpochMs) {
+        DashboardSummary summary = appRepository.getDashboardSummary(userId);
+
+        if (summary == null) {
+            return;
+        }
+
+        if (summary.getGhostCountTotal() != null && summary.getGhostCountTotal() > 0) {
+            summary.setGhostCountTotal(summary.getGhostCountTotal() - 1);
+        }
+
+        long thirtyDaysAgoMs = System.currentTimeMillis() - (30L * 24 * 60 * 60 * 1000);
+        if (deletedGhostCreatedAtEpochMs >= thirtyDaysAgoMs
+                && summary.getGhostCount30d() != null
+                && summary.getGhostCount30d() > 0) {
+            summary.setGhostCount30d(summary.getGhostCount30d() - 1);
+        }
+
         appRepository.saveDashboardSummary(summary);
     }
 }

@@ -177,6 +177,32 @@ public class GhostController {
         }
     }
     
+    public APIGatewayV2HTTPResponse deleteGhost(APIGatewayV2HTTPEvent event, String userId) {
+        try {
+            String ghostId = event.getPathParameters().get(Constants.RESPONSE_KEY_GHOST_ID);
+
+            List<Ghost> ghosts = ghostService.listGhosts(userId, MAX_SEARCH_LIMIT);
+            String sk = null;
+            for (Ghost g : ghosts) {
+                if (g.getGhostId().equals(ghostId)) {
+                    sk = g.getSk();
+                    break;
+                }
+            }
+
+            if (sk == null) {
+                return ResponseBuilder.notFound("Ghost not found");
+            }
+
+            ghostService.deleteGhost(userId, sk);
+
+            return ResponseBuilder.noContent();
+        } catch (Exception e) {
+            log.error("Error deleting ghost", e);
+            return ResponseBuilder.internalServerError("Failed to delete ghost");
+        }
+    }
+
     private static Double parseOptionalDouble(JsonNode json, String key) {
         if (json == null || !json.has(key) || json.get(key).isNull()) {
             return null;

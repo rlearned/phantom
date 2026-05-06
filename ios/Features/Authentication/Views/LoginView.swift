@@ -313,7 +313,7 @@ struct LoginView: View {
         }) {
             Text(viewModel.isLoading ? "Logging In..." : "Log In")
                 .font(.phantomBodySmallSemibold)
-                .foregroundColor(.phantomWhite)
+                .foregroundColor(.phantomOnAccent)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 10)
                 .background(
@@ -332,7 +332,7 @@ struct LoginView: View {
                     RoundedRectangle(cornerRadius: 30)
                         .stroke(
                             LinearGradient(
-                                colors: [Color.white, Color.white.opacity(0)],
+                                colors: [Color.phantomOnAccent, Color.phantomOnAccent.opacity(0)],
                                 startPoint: .top,
                                 endPoint: .bottom
                             ),

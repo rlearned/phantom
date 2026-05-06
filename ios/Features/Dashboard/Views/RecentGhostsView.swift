@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RecentGhostsView: View {
     @StateObject private var viewModel = RecentGhostsViewModel()
+    @State private var ghostPendingDelete: Ghost?
 
     var body: some View {
         NavigationStack {
@@ -29,7 +30,27 @@ struct RecentGhostsView: View {
                     await viewModel.loadData()
                 }
             }
+            .confirmationDialog(
+                "Delete this ghost?",
+                isPresented: deletePendingBinding,
+                titleVisibility: .visible,
+                presenting: ghostPendingDelete
+            ) { ghost in
+                Button("Delete \(ghost.ticker)", role: .destructive) {
+                    Task { await viewModel.deleteGhost(ghost) }
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: { _ in
+                Text("This permanently removes this logged ghost.")
+            }
         }
+    }
+
+    private var deletePendingBinding: Binding<Bool> {
+        Binding(
+            get: { ghostPendingDelete != nil },
+            set: { if !$0 { ghostPendingDelete = nil } }
+        )
     }
 
     // MARK: - States
@@ -149,7 +170,7 @@ struct RecentGhostsView: View {
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 10)
-            .background(Color.white)
+            .background(Color.phantomSurface)
             .cornerRadius(10)
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
@@ -221,11 +242,20 @@ struct RecentGhostsView: View {
             } else {
                 ForEach(viewModel.filteredAndSorted) { ghost in
                     NavigationLink {
-                        GhostDetailView(ghost: ghost)
+                        GhostDetailView(ghost: ghost) {
+                            Task { await viewModel.deleteGhost(ghost) }
+                        }
                     } label: {
                         RichGhostRow(ghost: ghost, dollarValue: viewModel.dollarValue(of: ghost))
                     }
                     .buttonStyle(.plain)
+                    .contextMenu {
+                        Button(role: .destructive) {
+                            ghostPendingDelete = ghost
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
                 }
             }
 
@@ -269,7 +299,7 @@ private struct StatPill: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
-        .background(Color.white)
+        .background(Color.phantomSurface)
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
@@ -289,10 +319,10 @@ private struct FilterPill: View {
         Button(action: action) {
             Text(label)
                 .font(.system(size: 13, weight: .semibold))
-                .foregroundColor(isActive ? .white : Color(hex: "#54555A"))
+                .foregroundColor(isActive ? .phantomOnAccent : Color(hex: "#54555A"))
                 .padding(.horizontal, 14)
                 .padding(.vertical, 7)
-                .background(isActive ? Color.phantomPurple : Color.white)
+                .background(isActive ? Color.phantomPurple : Color.phantomSurface)
                 .cornerRadius(16)
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
@@ -401,7 +431,7 @@ private struct RichGhostRow: View {
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
-        .background(Color.white)
+        .background(Color.phantomSurface)
         .cornerRadius(12)
         .overlay(
             RoundedRectangle(cornerRadius: 12)

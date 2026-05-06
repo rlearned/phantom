@@ -110,6 +110,11 @@ public class AppRepository extends DynamoDbRepository {
         putItem(item);
     }
     
+    public void deleteGhost(String userId, String sk) {
+        String pk = Constants.PK_USER_PREFIX + userId;
+        deleteItem(pk, sk);
+    }
+
     public List<Ghost> listGhosts(String userId, int limit) {
         String pk = Constants.PK_USER_PREFIX + userId;
         

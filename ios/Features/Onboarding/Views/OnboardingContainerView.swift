@@ -59,7 +59,7 @@ struct OnboardingContainerView: View {
                     
                     Text("Setting up your account...")
                         .font(.phantomBodySmall)
-                        .foregroundColor(.phantomWhite)
+                        .foregroundColor(.phantomOnAccent)
                 }
             }
         }

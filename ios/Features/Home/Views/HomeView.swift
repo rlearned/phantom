@@ -83,7 +83,7 @@ struct TopActionBarItem: View {
         } label: {
             Text(title)
                 .font(.system(size: 22, weight: .regular))
-                .foregroundColor(selectedTab == tab ? .phantomPurple : Color.black.opacity(0.35))
+                .foregroundColor(selectedTab == tab ? .phantomPurple : .phantomTabIconInactive)
                 .padding(.bottom, 4)
                 .overlay(alignment: .bottom) {
                     if selectedTab == tab {
@@ -157,7 +157,7 @@ struct HomeOverviewContent: View {
                     // Loading overlay while prices are being fetched
                     if hesitationVM.isLoading {
                         RoundedRectangle(cornerRadius: 16)
-                            .fill(Color.white.opacity(0.7))
+                            .fill(Color.phantomSurface.opacity(0.7))
                         ProgressView()
                             .progressViewStyle(.circular)
                     }
@@ -207,7 +207,7 @@ struct HomeStreakCard: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 16)
         .frame(maxWidth: .infinity)
-        .background(Color.white)
+        .background(Color.phantomSurface)
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
@@ -246,7 +246,7 @@ struct HomeStatCard: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, minHeight: 130, maxHeight: 130, alignment: .topLeading)
-        .background(Color.white)
+        .background(Color.phantomSurface)
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
@@ -284,7 +284,7 @@ struct InsightOfTheWeekCard: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white)
+        .background(Color.phantomSurface)
         .cornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
@@ -333,7 +333,7 @@ struct FrequentlyGhostedAssetsView: View {
                     VStack(spacing: 12) {
                         ForEach(viewModel.assets) { asset in
                             GhostedAssetRow(asset: asset)
-                                .background(Color.white)
+                                .background(Color.phantomSurface)
                                 .cornerRadius(16)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 16)

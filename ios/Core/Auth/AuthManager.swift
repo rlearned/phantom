@@ -41,6 +41,7 @@ class AuthManager: ObservableObject {
     
     @Published var authState: AuthState = .signedOut
     @Published var currentUserId: String?
+    @Published var currentUserEmail: String?
     
     var isAuthenticated: Bool {
         if case .signedIn = authState { return true }
@@ -54,6 +55,9 @@ class AuthManager: ObservableObject {
         if let token = getAccessToken(), !token.isEmpty {
             authState = .signedIn
             currentUserId = extractSubFromToken(token)
+            if let idToken = KeychainHelper.read(.idToken) {
+                currentUserEmail = extractClaim(idToken, key: "email")
+            }
         }
     }
     
@@ -69,10 +73,12 @@ class AuthManager: ObservableObject {
         KeychainHelper.save(refreshToken, for: .refreshToken)
         
         let userId = extractSubFromToken(idToken)
-        
+        let email = extractClaim(idToken, key: "email")
+
         DispatchQueue.main.async {
             self.authState = .signedIn
             self.currentUserId = userId
+            self.currentUserEmail = email
         }
     }
     
@@ -81,6 +87,7 @@ class AuthManager: ObservableObject {
         DispatchQueue.main.async {
             self.authState = .signedOut
             self.currentUserId = nil
+            self.currentUserEmail = nil
         }
     }
     
@@ -265,21 +272,25 @@ class AuthManager: ObservableObject {
     // MARK: - JWT Parsing
     
     private func extractSubFromToken(_ token: String) -> String? {
+        return extractClaim(token, key: "sub")
+    }
+
+    private func extractClaim(_ token: String, key: String) -> String? {
         let segments = token.split(separator: ".")
         guard segments.count >= 2 else { return nil }
-        
+
         var base64 = String(segments[1])
         let remainder = base64.count % 4
         if remainder > 0 {
             base64 += String(repeating: "=", count: 4 - remainder)
         }
-        
+
         guard let data = Data(base64Encoded: base64),
               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let sub = json["sub"] as? String else {
+              let value = json[key] as? String else {
             return nil
         }
-        
-        return sub
+
+        return value
     }
 }
