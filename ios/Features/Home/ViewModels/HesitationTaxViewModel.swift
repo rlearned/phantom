@@ -229,8 +229,12 @@ class HesitationTaxViewModel: ObservableObject {
                     // Weight each ghost's logged price by its share count so
                     // larger positions have proportionally more influence:
                     //   weightedAvgLoggedPrice = Σ(loggedPrice × shares) / Σ(shares)
-                    weightedLoggedPriceSum += loggedPrice * shares
-                    totalSharesForWeight += shares
+                    // Use signedShares (not absolute shares) to stay consistent
+                    // with netShares — SELL ghosts should subtract from the
+                    // weighted sum, not inflate it, otherwise the average
+                    // logged price is corrupted and produces huge tax numbers.
+                    weightedLoggedPriceSum += loggedPrice * signedShares
+                    totalSharesForWeight += signedShares
 
                     // ── If Invested Value ─────────────────────────────────────
                     // Accumulate the total capital the user would have deployed
