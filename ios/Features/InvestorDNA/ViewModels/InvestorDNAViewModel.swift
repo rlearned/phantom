@@ -184,13 +184,19 @@ class InvestorDNAViewModel: ObservableObject {
         isLoading = false
     }
 
+    /// Bumps a raw backend score up by 1 unless it is already at the maximum (5).
+    /// This ensures the minimum displayed score is 1 even when the backend returns 0.
+    private func displayScore(_ score: Int) -> Int {
+        score < 5 ? score + 1 : score
+    }
+
     private func applyResponse(_ response: InvestorDNAResponse) {
-        intensityScore    = response.scores.intensity
-        momentumScore     = response.scores.momentum
-        convictionScore   = response.scores.conviction
-        cautionScore      = response.scores.caution
-        deliberationScore = response.scores.deliberation
-        sensitivityScore  = response.scores.sensitivity
+        intensityScore    = displayScore(response.scores.intensity)
+        momentumScore     = displayScore(response.scores.momentum)
+        convictionScore   = displayScore(response.scores.conviction)
+        cautionScore      = displayScore(response.scores.caution)
+        deliberationScore = displayScore(response.scores.deliberation)
+        sensitivityScore  = displayScore(response.scores.sensitivity)
 
         personalizedInsights = [
             "intensity":    response.insights.intensity,

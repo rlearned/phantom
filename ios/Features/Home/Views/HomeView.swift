@@ -11,7 +11,6 @@ enum HomeTab {
     case home
     case hesitation
     case ghosted
-    case placeholder2
 }
 
 struct HomeView: View {
@@ -31,15 +30,6 @@ struct HomeView: View {
                 HesitationTaxView(viewModel: hesitationVM)
             case .ghosted:
                 FrequentlyGhostedAssetsView()
-            case .placeholder2:
-                // TODO: Replace with the real feature view when implemented
-                VStack {
-                    Spacer()
-                    Text("Placeholder")
-                        .font(.system(size: 20, weight: .regular))
-                        .foregroundColor(.phantomTextSecondary)
-                    Spacer()
-                }
             }
         }
         .background(Color(hex: "#F8F8FA"))
@@ -56,18 +46,14 @@ struct TopActionBar: View {
     @Binding var selectedTab: HomeTab
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 28) {
-                TopActionBarItem(title: "Home", tab: .home, selectedTab: $selectedTab)
-                TopActionBarItem(title: "Hesitation", tab: .hesitation, selectedTab: $selectedTab)
-                TopActionBarItem(title: "Ghosted", tab: .ghosted, selectedTab: $selectedTab)
-                // TODO: Replace "Placeholder" with the real feature tab name when implemented
-                TopActionBarItem(title: "Placeholder", tab: .placeholder2, selectedTab: $selectedTab)
-            }
-            .padding(.horizontal, 24)
-            .padding(.top, 16)
-            .padding(.bottom, 12)
+        HStack(spacing: 0) {
+            TopActionBarItem(title: "Home", tab: .home, selectedTab: $selectedTab)
+            TopActionBarItem(title: "Hesitation", tab: .hesitation, selectedTab: $selectedTab)
+            TopActionBarItem(title: "Ghosted", tab: .ghosted, selectedTab: $selectedTab)
         }
+        .padding(.horizontal, 24)
+        .padding(.top, 16)
+        .padding(.bottom, 12)
         .background(Color(hex: "#F8F8FA"))
     }
 }
@@ -92,6 +78,7 @@ struct TopActionBarItem: View {
                             .foregroundColor(.phantomPurple)
                     }
                 }
+                .frame(maxWidth: .infinity)
         }
         .buttonStyle(.plain)
     }
