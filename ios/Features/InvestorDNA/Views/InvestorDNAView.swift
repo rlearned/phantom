@@ -72,20 +72,18 @@ struct InvestorDNAView: View {
 // ─────────────────────────────────────────────────────────────────────────────
 
 struct DNAEmptyView: View {
+    @State private var showingStartLog = false
+
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
 
             VStack(spacing: 24) {
                 // Icon
-                ZStack {
-                    Circle()
-                        .fill(Color.phantomPurple.opacity(0.1))
-                        .frame(width: 80, height: 80)
-                    Image(systemName: "dna")
-                        .font(.system(size: 32))
-                        .foregroundColor(.phantomPurple)
-                }
+                Image("Logo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 80, height: 80)
 
                 VStack(spacing: 10) {
                     Text("Build Your Investor DNA")
@@ -102,7 +100,7 @@ struct DNAEmptyView: View {
 
                 // CTA button
                 Button {
-                    // TODO: Navigate to ghost logging flow
+                    showingStartLog = true
                 } label: {
                     Text("Log a Ghost")
                         .font(.system(size: 17, weight: .semibold))
@@ -116,6 +114,9 @@ struct DNAEmptyView: View {
             .padding(.horizontal, 40)
 
             Spacer()
+        }
+        .sheet(isPresented: $showingStartLog) {
+            StartLogView()
         }
     }
 }

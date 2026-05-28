@@ -57,18 +57,18 @@ struct BottomTabBar: View {
             }
 
             TabBarItem(
+                icon: "book",
+                isSelected: selectedTab == .ghosts
+            ) {
+                selectedTab = .ghosts
+            }
+
+            TabBarItem(
                 icon: "plus",
                 selectedIcon: "plus",
                 isSelected: selectedTab == .dashboard
             ) {
                 selectedTab = .dashboard
-            }
-
-            TabBarItem(
-                icon: "book",
-                isSelected: selectedTab == .ghosts
-            ) {
-                selectedTab = .ghosts
             }
 
             DNATabBarItem(

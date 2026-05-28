@@ -106,24 +106,22 @@ struct DashboardView: View {
                     await viewModel.loadData()
                 }
                 
-                // Floating Action Button
+                // Floating Action Button — positioned above the tab bar
                 VStack {
                     Spacer()
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            showingStartLog = true
-                        }) {
-                            Image(systemName: "plus")
-                                .font(.system(size: 24, weight: .bold))
-                                .foregroundColor(.phantomOnAccent)
-                                .frame(width: 64, height: 64)
-                                .background(Color.phantomPurple)
-                                .clipShape(Circle())
-                                .shadow(radius: 4)
-                        }
-                        .padding(64)
+                    Button(action: {
+                        showingStartLog = true
+                    }) {
+                        Text("Start Log")
+                            .font(.phantomBodyMedium)
+                            .foregroundColor(.phantomOnAccent)
+                            .padding(.horizontal, 40)
+                            .padding(.vertical, 16)
+                            .background(Color.phantomPurple)
+                            .clipShape(Capsule())
+                            .shadow(radius: 4)
                     }
+                    .padding(.bottom, 100)
                 }
             }
             .navigationBarHidden(true)

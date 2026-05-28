@@ -67,14 +67,10 @@ struct RecentGhostsView: View {
     private var emptyView: some View {
         VStack(spacing: 16) {
             Spacer()
-            ZStack {
-                Circle()
-                    .fill(Color.phantomPurple.opacity(0.1))
-                    .frame(width: 80, height: 80)
-                Image(systemName: "ghost")
-                    .font(.system(size: 32))
-                    .foregroundColor(.phantomPurple)
-            }
+            Image("Logo")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 80, height: 80)
             Text("No ghosts yet")
                 .font(.system(size: 22, weight: .bold))
                 .foregroundColor(Color(hex: "#1A1A1F"))
