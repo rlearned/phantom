@@ -93,9 +93,13 @@ public class MarketDataService {
 
         String normalizedSymbol = symbol.trim().toUpperCase();
 
+        // FIX: throw instead of returning price=0.0 — a zero price causes the iOS app to
+        // compute hesitationTax = (0 - loggedPrice) * shares = -100% hesitation percentage.
+        // The iOS HesitationTaxViewModel already handles thrown exceptions gracefully by
+        // skipping that ticker (guard let currentPrice = currentPrices[ticker] else { continue }).
         if (!isAlpacaConfigured()) {
-            log.error("Alpaca API keys not configured, returning mock data");
-            return createMockQuote(normalizedSymbol, 0.0);
+            log.error("Alpaca API keys not configured — cannot fetch real price for {}", normalizedSymbol);
+            throw new IllegalStateException("Alpaca API keys not configured");
         }
 
         // Check cache first
@@ -157,9 +161,10 @@ public class MarketDataService {
 
         String normalizedSymbol = symbol.trim().toUpperCase();
 
+        // FIX: throw instead of returning price=0.0 (same reason as getRealTimeQuote).
         if (!isAlpacaConfigured()) {
-            log.error("Alpaca API keys not configured, returning mock data");
-            return createMockQuote(normalizedSymbol, 0.0);
+            log.error("Alpaca API keys not configured — cannot fetch historical price for {}", normalizedSymbol);
+            throw new IllegalStateException("Alpaca API keys not configured");
         }
 
         LocalDate requestedDate = Instant.ofEpochMilli(epochMs)
@@ -221,8 +226,11 @@ public class MarketDataService {
         } catch (IllegalArgumentException e) {
             throw e;
         } catch (Exception e) {
+            // FIX: re-throw instead of returning price=0.0.
+            // The iOS HesitationTaxViewModel catches this via TaskGroup and skips the ticker,
+            // resulting in $0 hesitation tax (correct) instead of -100% (wrong).
             log.error("Error fetching market quote for {}", normalizedSymbol, e);
-            return createMockQuote(normalizedSymbol, 0.0);
+            throw new RuntimeException("Failed to fetch market quote for " + normalizedSymbol, e);
         }
     }
 
