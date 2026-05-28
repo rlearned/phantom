@@ -93,6 +93,7 @@ cd phantom
 
 **App crashes immediately on launch**
 - Make sure you selected an **iOS 26** simulator — the app may not launch on older iOS versions
+- or... simply rebuild...
 
 **Xcode says "Unable to boot device"**
 - Go to **Window → Devices and Simulators**, find the stuck simulator, and click **Erase All Content and Settings**
