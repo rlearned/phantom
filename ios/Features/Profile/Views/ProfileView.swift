@@ -11,6 +11,7 @@ struct ProfileView: View {
     @State private var dailyReminderEnabled: Bool = false
     @AppStorage("darkModeEnabled") private var darkModeEnabled: Bool = false
     @State private var showTermsAndPrivacy = false
+    @State private var showUnderConstruction = false
 
     var body: some View {
         ScrollView {
@@ -42,17 +43,23 @@ struct ProfileView: View {
                     ProfileRowCard(
                         icon: "person",
                         title: "Personal Information"
-                    ) {}
+                    ) {
+                        showUnderConstruction = true
+                    }
 
                     ProfileRowCard(
                         icon: "envelope",
                         title: "Email Address"
-                    ) {}
+                    ) {
+                        showUnderConstruction = true
+                    }
 
                     ProfileRowCard(
                         icon: "lock",
                         title: "Password & Security"
-                    ) {}
+                    ) {
+                        showUnderConstruction = true
+                    }
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 24)
@@ -92,7 +99,9 @@ struct ProfileView: View {
                     ProfileRowCard(
                         icon: "questionmark.circle",
                         title: "Help Center"
-                    ) {}
+                    ) {
+                        showUnderConstruction = true
+                    }
 
                     ProfileRowCard(
                         icon: "doc.text",
@@ -147,6 +156,9 @@ struct ProfileView: View {
         .background(Color(hex: "#F8F8FA"))
         .sheet(isPresented: $showTermsAndPrivacy) {
             TermsAndPrivacyView()
+        }
+        .sheet(isPresented: $showUnderConstruction) {
+            UnderConstructionView()
         }
         .task {
             await viewModel.loadProfile()
