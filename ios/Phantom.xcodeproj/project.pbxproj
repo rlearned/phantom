@@ -23,6 +23,7 @@
 		AA000002BBBB00010045F545 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000001BBBB00010045F545 /* MainTabView.swift */; };
 		AA000009BBBB00010045F545 /* HesitationTaxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000008BBBB00010045F545 /* HesitationTaxView.swift */; };
 		AA00000DBBBB00010045F545 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000CBBBB00010045F545 /* ProfileView.swift */; };
+		AB000001CCCC00010045F545 /* TermsAndPrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000002CCCC00010045F545 /* TermsAndPrivacyView.swift */; };
 		AA00000DCCCC00010045F545 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000DCDCC00010045F545 /* ProfileViewModel.swift */; };
 		AA000011BBBB00010045F545 /* StreakView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000010BBBB00010045F545 /* StreakView.swift */; };
 		AA000005BBBB00010045F545 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000004BBBB00010045F545 /* HomeView.swift */; };
@@ -79,6 +80,7 @@
 		AA000001BBBB00010045F545 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		AA000008BBBB00010045F545 /* HesitationTaxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HesitationTaxView.swift; sourceTree = "<group>"; };
 		AA00000CBBBB00010045F545 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		AB000002CCCC00010045F545 /* TermsAndPrivacyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndPrivacyView.swift; sourceTree = "<group>"; };
 		AA00000DCDCC00010045F545 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		AA000010BBBB00010045F545 /* StreakView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakView.swift; sourceTree = "<group>"; };
 		AA000004BBBB00010045F545 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 			isa = PBXGroup;
 			children = (
 				AA00000CBBBB00010045F545 /* ProfileView.swift */,
+				AB000002CCCC00010045F545 /* TermsAndPrivacyView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -605,6 +608,7 @@
 				AA000005BBBB00010045F545 /* HomeView.swift in Sources */,
 				AA000009BBBB00010045F545 /* HesitationTaxView.swift in Sources */,
 				AA00000DBBBB00010045F545 /* ProfileView.swift in Sources */,
+				AB000001CCCC00010045F545 /* TermsAndPrivacyView.swift in Sources */,
 				AA00000DCCCC00010045F545 /* ProfileViewModel.swift in Sources */,
 				AA000011BBBB00010045F545 /* StreakView.swift in Sources */,
 				DD000002DDF00010045F545 /* InvestorDNAView.swift in Sources */,

@@ -10,6 +10,7 @@ struct ProfileView: View {
     @State private var pushNotificationsEnabled: Bool = true
     @State private var dailyReminderEnabled: Bool = false
     @AppStorage("darkModeEnabled") private var darkModeEnabled: Bool = false
+    @State private var showTermsAndPrivacy = false
 
     var body: some View {
         ScrollView {
@@ -96,7 +97,9 @@ struct ProfileView: View {
                     ProfileRowCard(
                         icon: "doc.text",
                         title: "Terms & Privacy"
-                    ) {}
+                    ) {
+                        showTermsAndPrivacy = true
+                    }
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 24)
@@ -142,6 +145,9 @@ struct ProfileView: View {
             }
         }
         .background(Color(hex: "#F8F8FA"))
+        .sheet(isPresented: $showTermsAndPrivacy) {
+            TermsAndPrivacyView()
+        }
         .task {
             await viewModel.loadProfile()
         }
