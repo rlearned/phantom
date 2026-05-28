@@ -157,26 +157,6 @@ struct HesitationTaxView: View {
                     }
                 }
 
-                // MARK: - Performance Chart Placeholder
-                // TODO: Implement a line chart comparing:
-                //   - Ghost portfolio performance (what you would have made)
-                //   - Actual portfolio performance (what you did make)
-                // Use Swift Charts framework. X-axis = date, Y-axis = portfolio value.
-                // Data source: backend API endpoint for historical ghost trade performance.
-                VStack(alignment: .leading, spacing: 8) {
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.phantomTextPrimary.opacity(0.06))
-                        .frame(height: 120)
-                        .overlay(
-                            Text("Chart: Ghost vs. Actual Performance")
-                                .font(.system(size: 12, weight: .light))
-                                .foregroundColor(.phantomTextSecondary)
-                        )
-                    Text("Chart placeholder — TODO: Implement Swift Charts comparison graph")
-                        .font(.system(size: 10, weight: .light))
-                        .foregroundColor(.phantomTextSecondary)
-                }
-
                 // MARK: - Your Hesitation Tax Section (white card)
                 // Updated: now wrapped in a white card with border + shadow (matching Figma).
                 // Displays a narrative summary using the real computed hesitation tax values.
